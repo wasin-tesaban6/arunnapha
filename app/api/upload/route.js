@@ -20,7 +20,7 @@ export async function POST(req) {
   if (buf.length > limit) return fail('ไฟล์ใหญ่เกินไป');
   if (m[2] === 'svg+xml' && s?.role !== 'admin') return fail('ไม่รองรับไฟล์ SVG');
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return ok({ url: b.dataUrl, storage: 'inline' });
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) return ok({ url: b.dataUrl, storage: 'inline' });
   const ext = { png: 'png', jpeg: 'jpg', webp: 'webp', gif: 'gif', 'svg+xml': 'svg' }[m[2]];
   const folder = String(b.folder || 'misc').replace(/[^a-z0-9_-]/gi, '').slice(0, 20) || 'misc';
   const res = await put(`${folder}/${Date.now()}.${ext}`, buf, {

@@ -9,7 +9,7 @@ export async function GET() {
   return ok({
     ok: true,
     storage: storageKind,
-    blob: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    blob: Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID),
     line: lineEnabled,
     lineOA: process.env.NEXT_PUBLIC_LINE_OA_ID || '',
     lineAdminKey: Boolean(process.env.LINE_ADMIN_KEY),
