@@ -1,7 +1,7 @@
 # CRMS6 | อรุณนภา
 
 เว็บไซต์สภานักเรียน โรงเรียนเทศบาล ๖ นครเชียงราย — พรรคอรุณนภา
-Next.js 16 · ธีมฟ้า-ขาว · ฟอนต์ TH Niramit AS ทั้งเว็บ · Upstash Redis + Vercel Blob
+Next.js 16 · ธีมฟ้า-ขาว · ฟอนต์ TH Niramit AS ทั้งเว็บ · Upstash Redis (REST) + Vercel Blob
 
 ## หน้าเว็บ
 | URL | รายละเอียด |
@@ -41,6 +41,16 @@ Next.js 16 · ธีมฟ้า-ขาว · ฟอนต์ TH Niramit AS ท�
 npm install
 npm run dev   # ข้อมูลเก็บที่ .data/db.json อัตโนมัติ
 ```
+
+## ความปลอดภัย
+- รหัสผ่านเก็บแบบ scrypt + salt, cookie เซ็นด้วย HMAC (`AUTH_SECRET`), httpOnly / secure / SameSite=Lax, หมดอายุ 12 ชม.
+- เปลี่ยนรหัสผ่าน/ปิดบัญชีสมาชิก → ผู้ที่ล็อกอินค้างอยู่ถูกออกจากระบบทันที
+- กันเดารหัสผ่าน: ผิด 8 ครั้ง/15 นาที ต่อ IP → ล็อก 15 นาที (นับผ่าน Redis)
+- กันสแปมฟอร์มสาธารณะ (แจ้งปัญหา / ถามคำถาม / ฝากขาย / อัปโหลด / ติดตามเรื่อง) ด้วย rate limit ผ่าน Redis + honeypot
+- กัน CSRF (`proxy.js` ตรวจ Origin / Sec-Fetch-Site), กัน Clickjacking (X-Frame-Options + CSP frame-ancestors)
+- อัปโหลดรูปตรวจลายเซ็นไฟล์จริง (PNG/JPG/WebP/GIF เท่านั้น), ข้อมูลจากบุคคลทั่วไปรับเฉพาะรูปที่อัปผ่านระบบ
+- ข้อมูลส่วนตัวผู้แจ้งปัญหา / รหัสจัดการประกาศ / รหัสผ่าน ไม่ถูกส่งไปหน้าสาธารณะ
+- LINE webhook ตรวจลายเซ็น `x-line-signature`
 
 ## ความเร็ว
 - หน้าสาธารณะเป็น static + ISR (แคชที่ CDN, รีเฟรชทันทีเมื่อแก้ไขผ่าน /admin)

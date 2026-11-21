@@ -12,24 +12,31 @@ const Row = ({ ok, title, children }) => (
 
 export default function System() {
   const [s, setS] = useState(null);
-  useEffect(() => { api('/api/admin/status').then(setS).catch(() => {}); }, []);
+  useEffect(() => { api('/api/admin/status?deep=1').then(setS).catch(() => {}); }, []);
   const [f, set, setF] = useForm({ username: '', current: '', newPassword: '', confirm: '' });
   const { busy, err, onSubmit } = useSubmit(async () => {
     if (f.newPassword !== f.confirm) throw new Error('ยืนยันรหัสผ่านใหม่ไม่ตรงกัน');
     await api('/api/admin/password', f);
     setF({ username: '', current: '', newPassword: '', confirm: '' });
     toast('เปลี่ยนรหัสผ่านแล้ว ✓');
+    api('/api/admin/status?deep=1').then(setS).catch(() => {});
   });
   return (
     <div className="stack">
-      <h2 style={{ margin: 0 }}>ระบบ & ความปลอดภัย</h2>
+      <div className="row between"><h2 style={{ margin: 0 }}>ระบบ & ความปลอดภัย</h2><button className="btn sm ghost" onClick={() => { setS(null); api('/api/admin/status?deep=1').then(setS).catch(() => {}); }}>ตรวจสอบอีกครั้ง</button></div>
+      {s?.defaultPassword ? <div className="alert err"><b>⚠️ ยังใช้รหัสผ่านแอดมินเริ่มต้นอยู่!</b> รหัสนี้อยู่ในโค้ดที่เป็นสาธารณะ กรุณาเปลี่ยนด้านล่างทันที</div> : null}
+      {!s ? <div className="muted small">กำลังตรวจสอบระบบ...</div> : null}
       {s ? (
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-          <Row ok={s.storage === 'redis'} title={`ฐานข้อมูล: ${s.storage === 'redis' ? 'Upstash Redis' : s.storage === 'file' ? 'ไฟล์ในเครื่อง (โหมดทดสอบ)' : 'หน่วยความจำชั่วคราว'}`}>
-            {s.storage === 'redis' ? 'ข้อมูลถูกบันทึกถาวร' : 'ยังไม่ได้เชื่อม Redis — ข้อมูลอาจหายเมื่อระบบรีสตาร์ต! ไปที่ Vercel → Storage → Upstash for Redis → Connect Project'}
+          <Row ok={s.storage === 'redis' && s.dbOk} title={`ฐานข้อมูล: ${s.storage === 'redis' ? 'Upstash Redis' : s.storage === 'file' ? 'ไฟล์ในเครื่อง (โหมดทดสอบ)' : 'หน่วยความจำชั่วคราว'}`}>
+            {s.storage === 'redis'
+              ? (s.dbOk ? `ทดสอบเขียน-อ่านสำเร็จ (${s.dbMs} ms) — ข้อมูลถูกบันทึกถาวร` : `เชื่อมต่อไม่สำเร็จ: ${s.dbErr}`)
+              : 'ยังไม่ได้เชื่อม Redis — ข้อมูลอาจหายเมื่อระบบรีสตาร์ต! ไปที่ Vercel → Storage → Upstash for Redis → Connect Project แล้ว Redeploy'}
           </Row>
-          <Row ok={s.blob} title="ที่เก็บรูปภาพ: Vercel Blob">
-            {s.blob ? 'รูปภาพถูกเก็บบน CDN โหลดเร็ว' : 'ยังไม่ได้เชื่อม Blob — รูปจะถูกเก็บในฐานข้อมูลโดยตรง (ใช้ได้ แต่แนะนำให้เชื่อม Blob)'}
+          <Row ok={s.blob && s.blobOk} title="ที่เก็บรูปภาพ: Vercel Blob">
+            {!s.blob ? 'ยังไม่ได้เชื่อม Blob — รูปจะถูกเก็บในฐานข้อมูลโดยตรง (ใช้ได้ แต่แนะนำให้เชื่อม Blob)'
+              : s.blobOk ? 'ทดสอบอัปโหลดสำเร็จ — รูปภาพถูกเก็บบน CDN โหลดเร็ว'
+              : `ตั้งค่าแล้วแต่ทดสอบอัปโหลดไม่สำเร็จ: ${s.blobErr} (ระบบจะเก็บรูปในฐานข้อมูลแทนชั่วคราว)`}
           </Row>
           <Row ok={s.line} title="LINE Messaging API">
             {s.line ? `เชื่อมต่อแล้ว${s.lineOA ? ` · OA: ${s.lineOA}` : ''}${s.lineAdminKey ? '' : ' · ยังไม่ได้ตั้ง LINE_ADMIN_KEY'}` : 'ยังไม่ได้ตั้งค่า (ระบบแจ้งปัญหายังใช้ได้ผ่านเว็บ)'}

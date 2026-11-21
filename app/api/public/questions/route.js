@@ -6,7 +6,7 @@ import { notifyAdmins } from '@/lib/line';
 export async function POST(req) {
   const b = await body(req);
   if (b.website) return ok();
-  if (!rateLimit(req, 'question', 5)) return fail('ส่งคำถามถี่เกินไป กรุณารอสักครู่', 429);
+  if (!(await rateLimit(req, 'question', 6, 600))) return fail('ส่งคำถามถี่เกินไป กรุณารอสักครู่', 429);
   const text = str(b.text, 1000);
   if (text.length < 3) return fail('กรุณาพิมพ์คำถาม');
   const ev = b.eventId ? await db.get('events', String(b.eventId)) : null;

@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { api } from '@/lib/client';
 import Icon from '../Icon';
 import { useList, Toaster, logout } from '../portal/ui';
 import Settings from './Settings';
@@ -28,6 +29,8 @@ const TABS = [
 
 export default function AdminApp({ logo, lineOA, name }) {
   const [tab, setTab] = useState('dash');
+  const [health, setHealth] = useState(null);
+  useEffect(() => { if (tab === 'dash') api('/api/admin/status').then(setHealth).catch(() => {}); }, [tab]);
   const members = useList('/api/admin/members');
   const works = useList('/api/admin/works');
   const events = useList('/api/admin/events');
@@ -60,6 +63,12 @@ export default function AdminApp({ logo, lineOA, name }) {
         {tab === 'dash' ? (
           <div className="stack">
             <div className="top"><div><h2 style={{ margin: 0 }}>สวัสดี, {name} 👋</h2><div className="muted">ภาพรวมเว็บไซต์สภานักเรียน</div></div></div>
+            {health?.defaultPassword ? (
+              <div className="alert err row between"><span><b>⚠️ ยังใช้รหัสผ่านแอดมินเริ่มต้นอยู่</b> — ใครเห็นโค้ดก็เข้าระบบได้ กรุณาเปลี่ยนทันที</span><button className="btn sm" onClick={() => setTab('system')}>เปลี่ยนรหัสผ่าน</button></div>
+            ) : null}
+            {health && (health.storage !== 'redis' || !health.dbOk) ? (
+              <div className="alert warn row between"><span><b>⚠️ ฐานข้อมูลยังไม่พร้อม</b> — ข้อมูลที่แก้ไขอาจไม่ถูกบันทึกถาวร</span><button className="btn sm" onClick={() => setTab('system')}>ดูรายละเอียด</button></div>
+            ) : null}
             <div className="grid kpis">
               {[
                 ['สมาชิกพรรค', members.items?.length, 'members'],

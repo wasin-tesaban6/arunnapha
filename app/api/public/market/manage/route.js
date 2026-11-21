@@ -4,7 +4,7 @@ import { MARKET_STATUS } from '@/lib/constants';
 
 // ผู้ขายจัดการประกาศเองด้วย "รหัสจัดการประกาศ"
 export async function POST(req) {
-  if (!rateLimit(req, 'manage', 15)) return fail('ลองใหม่อีกครั้งภายหลัง', 429);
+  if (!(await rateLimit(req, 'manage', 20, 600))) return fail('ลองใหม่อีกครั้งภายหลัง', 429);
   const { id, code, action } = await body(req);
   const all = await db.list('market');
   const x = all.find((p) => (id ? p.id === id : true) && p.manageCode && p.manageCode === String(code || '').toUpperCase().trim());

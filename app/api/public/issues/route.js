@@ -10,7 +10,7 @@ const code = () => 'CR' + Array.from({ length: 6 }, () => ABC[Math.floor(Math.ra
 export async function POST(req) {
   const b = await body(req);
   if (b.website) return ok({ ok: true, code: 'CR000000' }); // honeypot
-  if (!rateLimit(req, 'issue', 5)) return fail('ส่งเรื่องถี่เกินไป กรุณารอสักครู่', 429);
+  if (!(await rateLimit(req, 'issue', 5, 600))) return fail('ส่งเรื่องถี่เกินไป กรุณารอสักครู่', 429);
   const detail = str(b.detail, 2000);
   if (detail.length < 5) return fail('กรุณาอธิบายปัญหาอย่างน้อย 5 ตัวอักษร');
   let c = code();
@@ -21,7 +21,7 @@ export async function POST(req) {
     category: str(b.category, 60) || 'อื่น ๆ',
     location: str(b.location, 200),
     detail,
-    photo: img(b.photo),
+    photo: img(b.photo, 700, true),
     reporterName: b.anonymous ? '' : str(b.reporterName, 100),
     reporterClass: b.anonymous ? '' : str(b.reporterClass, 40),
     reporterContact: b.anonymous ? '' : str(b.reporterContact, 150),
