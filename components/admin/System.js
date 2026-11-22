@@ -35,7 +35,7 @@ export default function System() {
           </Row>
           <Row ok={s.blob && s.blobOk} title="ที่เก็บรูปภาพ: Vercel Blob">
             {!s.blob ? 'ยังไม่ได้เชื่อม Blob — รูปจะถูกเก็บในฐานข้อมูลโดยตรง (ใช้ได้ แต่แนะนำให้เชื่อม Blob)'
-              : s.blobOk ? 'ทดสอบอัปโหลดสำเร็จ — รูปภาพถูกเก็บบน CDN โหลดเร็ว'
+              : s.blobOk ? `ทดสอบอัปโหลดสำเร็จ (ที่เก็บแบบ ${s.blobAccess === 'private' ? 'Private' : 'Public'}) — รูปภาพโหลดผ่าน CDN`
               : `ตั้งค่าแล้วแต่ทดสอบอัปโหลดไม่สำเร็จ: ${s.blobErr} (ระบบจะเก็บรูปในฐานข้อมูลแทนชั่วคราว)`}
           </Row>
           <Row ok={s.line} title="LINE Messaging API">

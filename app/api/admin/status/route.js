@@ -12,14 +12,14 @@ export async function GET(req) {
   if (!(await requireAdmin())) return fail('ไม่มีสิทธิ์', 401);
   let dbOk = false, dbMs = 0, dbErr = '';
   try { dbMs = await pingDb(); dbOk = true; } catch (e) { dbErr = String(e?.message || e).slice(0, 200); }
-  let blobOk = false, blobErr = '';
+  let blobOk = false, blobErr = '', blobAccess = '';
   if (blobConfigured() && deep) {
-    try { await pingBlob(); blobOk = true; } catch (e) { blobErr = String(e?.message || e).slice(0, 200); }
+    try { blobAccess = await pingBlob(); blobOk = true; } catch (e) { blobErr = String(e?.message || e).slice(0, 200); }
   }
   return ok({
     ok: true,
     storage: storageKind, dbOk, dbMs, dbErr,
-    blob: blobConfigured(), blobOk, blobErr, blobTested: deep,
+    blob: blobConfigured(), blobOk, blobErr, blobTested: deep, blobAccess,
     line: lineEnabled,
     lineOA: process.env.NEXT_PUBLIC_LINE_OA_ID || '',
     lineAdminKey: Boolean(process.env.LINE_ADMIN_KEY),

@@ -1,7 +1,6 @@
-import { put } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { ok, fail, body, rateLimit } from '@/lib/api';
-import { blobConfigured } from '@/lib/blob';
+import { blobConfigured, uploadToBlob } from '@/lib/blob';
 
 export const runtime = 'nodejs';
 
@@ -38,10 +37,8 @@ export async function POST(req) {
   const ext = { png: 'png', jpeg: 'jpg', webp: 'webp', gif: 'gif' }[real];
   const folder = String(b.folder || 'misc').replace(/[^a-z0-9_-]/gi, '').slice(0, 20) || 'misc';
   try {
-    const res = await put(`${folder}/${Date.now()}.${ext}`, buf, {
-      access: 'public', contentType: `image/${real}`, addRandomSuffix: true, cacheControlMaxAge: 31536000,
-    });
-    return ok({ url: res.url, storage: 'blob' });
+    const res = await uploadToBlob(`${folder}/${Date.now()}.${ext}`, buf, `image/${real}`);
+    return ok({ url: res.url, storage: 'blob', access: res.access });
   } catch (e) {
     console.error('Blob upload failed, fallback to inline:', e?.message || e);
     return inline();
