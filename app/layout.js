@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import localFont from 'next/font/local';
 import './globals.css';
 import { getSettings } from '@/lib/data';
@@ -19,7 +20,10 @@ export async function generateMetadata() {
   return {
     title: { default: s.siteTitle, template: `%s | ${s.siteTitle}` },
     description: desc,
-    icons: { icon: s.logoUrl?.startsWith('data:') ? '/logo.svg' : s.logoUrl || '/logo.svg' },
+    icons: (() => {
+      const v = crypto.createHash('sha1').update(s.logoUrl || '/logo.svg').digest('hex').slice(0, 10);
+      return { icon: `/api/icon?v=${v}`, shortcut: `/api/icon?v=${v}`, apple: `/api/icon?v=${v}` };
+    })(),
     openGraph: { title: s.siteTitle, description: desc, type: 'website', locale: 'th_TH' },
   };
 }

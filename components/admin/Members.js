@@ -4,6 +4,7 @@ import Icon from '../Icon';
 import ImageUpload from '../ImageUpload';
 import { Modal, SaveBar, useForm, useSubmit, Loading, toast } from '../portal/ui';
 import { POSITION_SUGGESTIONS } from '@/lib/seed';
+import MemberImport from './MemberImport';
 
 function MemberEditor({ item, nextOrder, onSave, onClose }) {
   const [f, set] = useForm({
@@ -54,6 +55,7 @@ function MemberEditor({ item, nextOrder, onSave, onClose }) {
 export default function Members({ list }) {
   const { items, save, remove } = list;
   const [edit, setEdit] = useState(null);
+  const [importing, setImporting] = useState(false);
   if (!items) return <Loading />;
   const move = async (i, d) => {
     const a = items[i], b = items[i + d];
@@ -68,7 +70,10 @@ export default function Members({ list }) {
     <>
       <div className="top">
         <div><h2 style={{ margin: 0 }}>สมาชิกพรรค & บัญชีผู้ใช้</h2><div className="muted small">เพิ่ม–ลด สมาชิก ตำแหน่ง ลำดับการแสดง และสร้างบัญชีให้สมาชิกเข้าสู่ระบบ</div></div>
-        <button className="btn" onClick={() => setEdit({})}><Icon name="plus" size={20} /> เพิ่มสมาชิก</button>
+        <div className="row">
+          <button className="btn ghost" onClick={() => setImporting(true)}><Icon name="users" size={20} /> เพิ่มหลายคน / CSV</button>
+          <button className="btn" onClick={() => setEdit({})}><Icon name="plus" size={20} /> เพิ่มสมาชิก</button>
+        </div>
       </div>
       <div className="table-wrap">
         <table className="t">
@@ -94,6 +99,7 @@ export default function Members({ list }) {
           </tbody>
         </table>
       </div>
+      {importing ? <MemberImport existing={items} onClose={() => setImporting(false)} onDone={list.reload} /> : null}
       {edit ? <MemberEditor item={edit.id ? edit : null} nextOrder={nextOrder} onSave={save} onClose={() => setEdit(null)} /> : null}
     </>
   );

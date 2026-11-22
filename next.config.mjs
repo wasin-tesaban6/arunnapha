@@ -10,12 +10,15 @@ const securityHeaders = [
 const nextConfig = {
   poweredByHeader: false,
   compress: true,
+  async rewrites() {
+    return [{ source: '/favicon.ico', destination: '/api/icon' }];
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
       { source: '/fonts/:path*', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       { source: '/(admin|scmember)', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }, { key: 'Cache-Control', value: 'no-store' }] },
-      { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store' }] },
+      { source: '/api/((?!icon).*)', headers: [{ key: 'Cache-Control', value: 'no-store' }] },
     ];
   },
 };
