@@ -12,6 +12,7 @@ import Issues from './Issues';
 import Market from './Market';
 import QRTool from './QRTool';
 import System from './System';
+import Admins from './Admins';
 import { ISSUE_STATUS, thDateTime } from '@/lib/constants';
 
 const TABS = [
@@ -24,6 +25,7 @@ const TABS = [
   ['issues', 'แจ้งปัญหา', 'flag'],
   ['market', 'ตลาดนัด', 'shop'],
   ['qr', 'QR Code', 'qr'],
+  ['admins', 'ผู้ดูแลระบบ', 'user'],
   ['system', 'ระบบ & รหัสผ่าน', 'lock'],
 ];
 
@@ -106,6 +108,7 @@ export default function AdminApp({ logo, lineOA, name }) {
         {tab === 'issues' ? <Issues list={issues} /> : null}
         {tab === 'market' ? <Market list={market} /> : null}
         {tab === 'qr' ? <QRTool lineOA={lineOA} /> : null}
+        {tab === 'admins' ? <Admins /> : null}
         {tab === 'system' ? <System /> : null}
       </main>
       <Toaster />
