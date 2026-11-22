@@ -1,13 +1,14 @@
 import { db } from '@/lib/db';
 import { ok, fail, body, refresh, rateLimit } from '@/lib/api';
 import { MARKET_STATUS } from '@/lib/constants';
+import { normalizeCode } from '@/lib/codes';
 
 // ผู้ขายจัดการประกาศเองด้วย "รหัสจัดการประกาศ"
 export async function POST(req) {
   if (!(await rateLimit(req, 'manage', 20, 600))) return fail('ลองใหม่อีกครั้งภายหลัง', 429);
   const { id, code, action } = await body(req);
   const all = await db.list('market');
-  const x = all.find((p) => (id ? p.id === id : true) && p.manageCode && p.manageCode === String(code || '').toUpperCase().trim());
+  const x = all.find((p) => (id ? p.id === id : true) && p.manageCode && normalizeCode(code).length >= 6 && p.manageCode === normalizeCode(code));
   if (!x) return fail('รหัสจัดการประกาศไม่ถูกต้อง', 404);
   if (action === 'check') return ok({ ok: true, item: { id: x.id, title: x.title, status: x.status, statusLabel: MARKET_STATUS[x.status]?.label, adminNote: x.adminNote || '' } });
   if (action === 'sold') { if (x.status !== 'approved') return fail('ประกาศนี้ยังไม่ได้อยู่ในสถานะกำลังขาย'); await db.put('market', { ...x, status: 'sold', updatedAt: Date.now() }); }

@@ -10,7 +10,7 @@ const help = () => {
     'สวัสดีครับ 🙏 นี่คือระบบแจ้งปัญหา สภานักเรียน CRMS6 | อรุณนภา',
     '',
     '• แจ้งปัญหาใหม่: ' + (u ? `${u}/report` : 'สแกน QR Code ในโรงเรียน'),
-    '• ติดตามเรื่อง: พิมพ์รหัสเรื่อง เช่น CR7K2QXA',
+    '• ติดตามเรื่อง: พิมพ์รหัสเรื่อง เช่น CRMS6QR7K2QXA',
     '  แล้วระบบจะส่งความคืบหน้าให้ทาง LINE อัตโนมัติทุกครั้งที่มีการอัปเดต',
   ].join('\n');
 };
@@ -54,9 +54,10 @@ export async function POST(req) {
     }
 
     // ติดตามเรื่องด้วยรหัส
-    const m = /CR[\s-]?([A-Z0-9]{6})/i.exec(text);
+    // รองรับรหัสใหม่ (CRMS6QRxxxxxx) และรหัสรูปแบบเดิม (CRxxxxxx) ที่ออกไปแล้ว
+    const m = /(CRMS6QR[A-Z0-9]{6}|CR[A-Z0-9]{6})/i.exec(text.replace(/[\s-]/g, ''));
     if (m) {
-      const code = ('CR' + m[1]).toUpperCase();
+      const code = m[1].toUpperCase();
       const issue = await db.get('issues', code);
       if (!issue) { await lineReply(ev.replyToken, [{ type: 'text', text: `ไม่พบรหัสเรื่อง ${code} กรุณาตรวจสอบอีกครั้ง` }]); continue; }
       if (src.userId && !(issue.lineSubs || []).includes(src.userId)) {

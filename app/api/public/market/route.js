@@ -3,7 +3,7 @@ import { clean } from '@/lib/schema';
 import { ok, fail, body, refresh, str, rateLimit } from '@/lib/api';
 import { notifyAdmins } from '@/lib/line';
 
-const ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+import { makeCode } from '@/lib/codes';
 
 export async function POST(req) {
   const b = await body(req);
@@ -13,7 +13,11 @@ export async function POST(req) {
   if (!str(b.title) || !str(b.sellerName) || !str(b.sellerClass) || !str(b.contact)) return fail('กรุณากรอกข้อมูลที่มีเครื่องหมาย * ให้ครบ');
   const item = clean.market({ ...b, status: 'pending', adminNote: '' }, {}, true);
   item.status = 'pending';
-  item.manageCode = Array.from({ length: 6 }, () => ABC[Math.floor(Math.random() * ABC.length)]).join('');
+  // รหัสรับเรื่องฝากขาย (ใช้จัดการประกาศ) เช่น CRMS6MK4HD9PT — ไม่ซ้ำกับประกาศอื่น
+  const used = new Set((await db.list('market')).map((p) => p.manageCode));
+  let mc = makeCode('market');
+  while (used.has(mc)) mc = makeCode('market');
+  item.manageCode = mc;
   await db.put('market', item);
   await notifyAdmins(`🛍️ มีประกาศฝากขายใหม่รออนุมัติ\n${item.title} — ${item.price || '-'}\nผู้ขาย: ${item.sellerName} (${item.sellerClass})`);
   refresh();

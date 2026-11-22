@@ -12,7 +12,7 @@ export default function TrackSearch() {
   return (
     <div className="stack" style={{ maxWidth: 640, margin: '0 auto' }}>
       <form className="card pad form" onSubmit={go}>
-        <label className="f">กรอกรหัสเรื่อง<input className="input" style={{ fontSize: 28, letterSpacing: 3, textTransform: 'uppercase' }} value={code} onChange={(e) => setCode(e.target.value)} placeholder="CRXXXXXX" maxLength={12} required /></label>
+        <label className="f">กรอกรหัสเรื่อง<input className="input" style={{ fontSize: 28, letterSpacing: 3, textTransform: 'uppercase' }} value={code} onChange={(e) => setCode(e.target.value)} placeholder="CRMS6QRXXXXXX" maxLength={20} required /></label>
         <button className="btn">ติดตามความคืบหน้า</button>
       </form>
       {mine.length ? (

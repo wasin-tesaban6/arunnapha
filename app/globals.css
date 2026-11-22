@@ -288,7 +288,7 @@ label.f .hint { font-weight: 400; color: var(--muted); font-size: 17px; }
 .live { display: inline-flex; align-items: center; gap: 6px; font-size: 16px; color: var(--ok); font-weight: 700; }
 .live::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--ok); animation: pulse 1.6s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(22,163,74,.5); } 100% { box-shadow: 0 0 0 10px rgba(22,163,74,0); } }
-.code-big { font-size: 44px; letter-spacing: 4px; font-weight: 700; color: var(--navy-800); background: var(--sky-50); border: 2px dashed var(--sky-300); border-radius: 14px; padding: 6px 18px; display: inline-block; }
+.code-big { font-size: clamp(26px, 7vw, 44px); letter-spacing: 2px; word-break: break-all; font-weight: 700; color: var(--navy-800); background: var(--sky-50); border: 2px dashed var(--sky-300); border-radius: 14px; padding: 6px 18px; display: inline-block; }
 .line-btn { background: #06c755; }
 .line-btn:hover { background: #05b04b; box-shadow: 0 8px 20px rgba(6,199,85,.3); }
 

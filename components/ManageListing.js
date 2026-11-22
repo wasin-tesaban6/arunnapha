@@ -20,7 +20,7 @@ export default function ManageListing() {
   return (
     <div className="stack" style={{ maxWidth: 620, margin: '0 auto' }}>
       <form className="card pad form" onSubmit={(e) => { e.preventDefault(); run(); }}>
-        <label className="f">รหัสจัดการประกาศ<input className="input" style={{ fontSize: 28, letterSpacing: 3, textTransform: 'uppercase' }} value={code} onChange={(e) => setCode(e.target.value)} maxLength={10} required /></label>
+        <label className="f">รหัสจัดการประกาศ<input className="input" style={{ fontSize: 28, letterSpacing: 3, textTransform: 'uppercase' }} value={code} onChange={(e) => setCode(e.target.value)} placeholder="CRMS6MKXXXXXX" maxLength={20} required /></label>
         <button className="btn" disabled={st.busy}>ตรวจสอบ</button>
       </form>
       {st.err ? <div className="alert err">{st.err}</div> : null}
