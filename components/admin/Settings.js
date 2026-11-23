@@ -44,6 +44,12 @@ export default function Settings() {
       </div>
 
       <div className="card pad form">
+        <h3 style={{ margin: 0 }}>สไลด์โชว์หน้าแรก <span className="muted small" style={{ fontWeight: 400 }}>(สูงสุด 8 รูป)</span></h3>
+        <div className="xs muted">รูปจะเลื่อนเปลี่ยนอัตโนมัติเป็นพื้นหลังส่วนบนของหน้าแรก · ใช้ปุ่ม ‹ › จัดลำดับ · ลบรูปทั้งหมด = ใช้พื้นหลังสีน้ำเงินแบบเดิม · แนะนำรูปแนวนอน</div>
+        <ImageUpload multiple reorder wide max={8} value={f.heroSlides || []} onChange={(v) => setF((p) => ({ ...p, heroSlides: v }))} folder="hero" size={1920} label="เพิ่มรูปสไลด์" />
+      </div>
+
+      <div className="card pad form">
         <div className="row between"><h3 style={{ margin: 0 }}>นโยบายพรรค</h3>
           <button type="button" className="btn sm ghost" onClick={() => setF((p) => ({ ...p, policies: [...pol, { title: '', detail: '' }] }))}><Icon name="plus" size={16} /> เพิ่มนโยบาย</button></div>
         <label className="f">คำอธิบายพรรค / เกี่ยวกับเรา<textarea className="textarea" value={f.about} onChange={set('about')} /></label>

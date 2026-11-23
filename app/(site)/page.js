@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Icon from '@/components/Icon';
+import HeroSlider from '@/components/HeroSlider';
 import { MemberCard, WorkCard, EventItem, ProductCard, Empty } from '@/components/Cards';
 import { getSettings, getMembers, getWorks, getEvents, getMarket, getIssueStats } from '@/lib/data';
 import { todayISO } from '@/lib/constants';
@@ -21,10 +22,12 @@ export default async function Home() {
   const upcoming = events.filter((e) => (e.endDate || e.date) >= today).slice(0, 4);
   const memberMap = Object.fromEntries(members.map((m) => [m.id, m]));
   const policies = (s.policies || []).filter((p) => p.title || p.detail);
+  const slides = (s.heroSlides || []).filter(Boolean).slice(0, 8);
 
   return (
     <>
-      <section className="hero">
+      <section className={`hero ${slides.length ? 'has-slides' : ''}`}>
+        <HeroSlider slides={slides} />
         <div className="container">
           <div>
             <div className="eyebrow"><Icon name="sun" size={18} /> {s.councilName} {s.schoolName}</div>

@@ -1,7 +1,7 @@
 import { db } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { getSettings } from '@/lib/data';
-import { ok, fail, body, refresh, str, img } from '@/lib/api';
+import { ok, fail, body, refresh, str, img, imgs } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +26,7 @@ export async function POST(req) {
     policies: Array.isArray(b.policies) ? b.policies.slice(0, 30).map((p) => ({ title: str(p.title, 200), detail: str(p.detail, 2000) })) : cur.policies,
     logoUrl: img(b.logoUrl) || '/logo.svg',
     heroImage: img(b.heroImage, 900),
+    heroSlides: Array.isArray(b.heroSlides) ? imgs(b.heroSlides, 8) : cur.heroSlides,
     announcement: str(b.announcement, 400),
     contact: Object.fromEntries(['facebook', 'instagram', 'line', 'email', 'tiktok'].map((k) => [k, str(b.contact?.[k], 300)])),
     marketRules: str(b.marketRules, 8000),
