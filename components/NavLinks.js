@@ -7,7 +7,7 @@ import Icon from './Icon';
 const LINKS = [
   ['/', 'หน้าแรก'],
   ['/members', 'สมาชิกพรรค'],
-  ['/works', 'ผลงาน'],
+  ['/works', 'จิตอาสาวิชาการ'],
   ['/calendar', 'ปฏิทิน'],
   ['/report', 'แจ้งปัญหา'],
   ['/market', 'ตลาดนัดออนไลน์'],
