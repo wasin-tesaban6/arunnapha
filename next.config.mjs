@@ -10,6 +10,13 @@ const securityHeaders = [
 const nextConfig = {
   poweredByHeader: false,
   compress: true,
+  async redirects() {
+    // หน้าติดตามเรื่องถูกนำออกแล้ว → ลิงก์เก่าพาไปหน้าแจ้งปัญหา
+    return [
+      { source: '/track', destination: '/report', permanent: false },
+      { source: '/track/:code*', destination: '/report', permanent: false },
+    ];
+  },
   async rewrites() {
     return [{ source: '/favicon.ico', destination: '/api/icon' }];
   },

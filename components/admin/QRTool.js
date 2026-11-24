@@ -34,7 +34,7 @@ export default function QRTool({ lineOA }) {
             <div style={{ fontWeight: 700, color: 'var(--navy-800)', fontSize: 18 }}>สภานักเรียน CRMS6 | อรุณนภา</div>
             <img src={c.img} alt={c.title} />
             <div style={{ fontWeight: 700, fontSize: 24 }}>{c.title}</div>
-            <div className="xs muted">สแกนเพื่อแจ้งปัญหา · ติดตามผลแบบ Real-Time</div>
+            <div className="xs muted">สแกนเพื่อแจ้งปัญหา</div>
             <a className="xs no-print" href={c.img} download={`QR-${c.title}.png`}>ดาวน์โหลด PNG</a>
           </div>
         ))}

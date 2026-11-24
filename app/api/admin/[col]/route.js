@@ -3,7 +3,6 @@ import { requireAdmin, hashPassword } from '@/lib/auth';
 import { clean } from '@/lib/schema';
 import { ok, fail, body, refresh, str } from '@/lib/api';
 import { ISSUE_STATUS } from '@/lib/constants';
-import { notifySubscribers } from '@/lib/line';
 
 export const dynamic = 'force-dynamic';
 const ALLOWED = ['members', 'events', 'questions', 'issues', 'market', 'volunteer', 'opportunities'];
@@ -38,7 +37,6 @@ export async function POST(req, { params }) {
     if (b.internalNote !== undefined) item.internalNote = str(b.internalNote, 1000);
     if (b.assignee !== undefined) item.assignee = str(b.assignee, 120);
     await db.put(col, item);
-    if (changed || note) await notifySubscribers(item, changed ? '🔔 อัปเดตสถานะเรื่องที่แจ้ง' : '💬 มีข้อความใหม่จากสภานักเรียน');
     refresh();
     return ok({ ok: true, item });
   }

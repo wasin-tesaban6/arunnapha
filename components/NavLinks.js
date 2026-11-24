@@ -17,7 +17,7 @@ export default function NavLinks() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [path]);
-  const active = (h) => (h === '/' ? path === '/' : path.startsWith(h) || (h === '/report' && path.startsWith('/track')));
+  const active = (h) => (h === '/' ? path === '/' : path.startsWith(h));
   return (
     <>
       <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="เมนู" aria-expanded={open}>

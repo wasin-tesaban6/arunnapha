@@ -26,7 +26,7 @@ export default function Footer({ s }) {
               <li><Link href="/members">สมาชิกพรรค</Link></li>
               <li><Link href="/works">ศูนย์รวมผลงาน</Link></li>
               <li><Link href="/calendar">ปฏิทินวิชาการ</Link></li>
-              <li><Link href="/report">แจ้งปัญหา / ติดตามเรื่อง</Link></li>
+              <li><Link href="/report">แจ้งปัญหา</Link></li>
               <li><Link href="/market">ตลาดนัดออนไลน์</Link></li>
             </ul>
           </div>

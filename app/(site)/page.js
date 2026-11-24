@@ -104,7 +104,7 @@ export default async function Home() {
           <div>
             <div className="section-head">
               <div><div className="kicker">{t.statsKicker}</div><h2 style={{ fontSize: 38 }}>{t.statsTitle}</h2></div>
-              <Link href="/track">ติดตามเรื่อง →</Link>
+              <Link href="/report">แจ้งปัญหา →</Link>
             </div>
             <div className="grid stats" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
               <div className="card stat"><div className="v">{stats.total}</div><div className="l">แจ้งทั้งหมด</div></div>
@@ -153,7 +153,6 @@ export default async function Home() {
             </div>
             <div className="row" style={{ position: 'relative', zIndex: 1 }}>
               <Link href="/report" className="btn gold">แจ้งปัญหา</Link>
-              <Link href="/track" className="btn white">ติดตามเรื่อง</Link>
             </div>
           </div>
         </div>

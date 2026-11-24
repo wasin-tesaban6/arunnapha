@@ -24,7 +24,6 @@ function IssueEditor({ item, onSave, onClose }) {
               <div>ติดต่อ: {item.reporterContact || '-'}</div>
             </>}
             <div>แจ้งเมื่อ: {thDateTime(item.createdAt)}</div>
-            <div>ติดตามผ่าน LINE: {item.lineSubs?.length || 0} คน</div>
           </div>
           <div>
             <b>ไทม์ไลน์</b>
@@ -44,14 +43,13 @@ function IssueEditor({ item, onSave, onClose }) {
                 style={status === k ? { background: v.color, borderColor: v.color, color: '#fff' } : null}>{v.label}</button>
             ))}
           </div>
-          <label className="f">ข้อความถึงผู้แจ้ง <span className="hint">(แสดงในหน้าติดตาม + ส่งทาง LINE)</span>
+          <label className="f">บันทึกความคืบหน้า <span className="hint">(เพิ่มในไทม์ไลน์ของเรื่องนี้)</span>
             <textarea className="textarea" value={note} onChange={(e) => setNote(e.target.value)} placeholder="เช่น ประสานงานฝ่ายอาคารสถานที่แล้ว คาดว่าจะแก้ไขภายใน 3 วัน" /></label>
           <label className="f">ผู้รับผิดชอบ<input className="input" value={assignee} onChange={(e) => setAssignee(e.target.value)} placeholder="ชื่อสมาชิก / ฝ่าย" /></label>
           <label className="f">บันทึกภายใน <span className="hint">(ไม่แสดงต่อสาธารณะ)</span><textarea className="textarea" style={{ minHeight: 80 }} value={internalNote} onChange={(e) => setInternal(e.target.value)} /></label>
           {err ? <div className="alert err">{err}</div> : null}
           <div className="row" style={{ justifyContent: 'flex-end' }}>
-            <a className="btn ghost" href={`/track/${item.code}`} target="_blank" rel="noopener">ดูหน้าติดตาม</a>
-            <button className="btn" disabled={busy}>{busy ? 'กำลังบันทึก...' : 'บันทึก & แจ้งผู้แจ้ง'}</button>
+            <button className="btn" disabled={busy}>{busy ? 'กำลังบันทึก...' : 'บันทึก'}</button>
           </div>
         </form>
       </div>
@@ -71,7 +69,7 @@ export default function Issues({ list }) {
   return (
     <>
       <div className="top">
-        <div><h2 style={{ margin: 0 }}>เรื่องแจ้งปัญหา</h2><div className="muted small">อัปเดตสถานะ → ผู้แจ้งเห็นทันทีในหน้าติดตาม และได้รับแจ้งเตือนทาง LINE</div></div>
+        <div><h2 style={{ margin: 0 }}>เรื่องแจ้งปัญหา</h2><div className="muted small">เรื่องที่เคยแจ้งผ่านเว็บ · อัปเดตสถานะและบันทึกความคืบหน้า (ตัวเลขสถิติบนเว็บนับจากรายการนี้)</div></div>
         <input className="input" style={{ maxWidth: 260 }} placeholder="ค้นหา รหัส/รายละเอียด" value={q} onChange={(e) => setQ(e.target.value)} />
       </div>
       <div className="filters">

@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { verifyLineSignature, lineReply, issueText, siteUrl, lineEnabled } from '@/lib/line';
+import { verifyLineSignature, lineReply, siteUrl, lineEnabled } from '@/lib/line';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -9,9 +9,8 @@ const help = () => {
   return [
     'สวัสดีครับ 🙏 นี่คือระบบแจ้งปัญหา สภานักเรียน CRMS6 | อรุณนภา',
     '',
-    '• แจ้งปัญหาใหม่: ' + (u ? `${u}/report` : 'สแกน QR Code ในโรงเรียน'),
-    '• ติดตามเรื่อง: พิมพ์รหัสเรื่อง เช่น CRMS6QR7K2QXA',
-    '  แล้วระบบจะส่งความคืบหน้าให้ทาง LINE อัตโนมัติทุกครั้งที่มีการอัปเดต',
+    '• แจ้งปัญหา: พิมพ์รายละเอียด สถานที่ และส่งรูปภาพในแชตนี้ได้เลย',
+    '  สภานักเรียนจะตรวจสอบและแจ้งความคืบหน้ากลับในแชต',
   ].join('\n');
 };
 
@@ -53,20 +52,6 @@ export async function POST(req) {
       continue;
     }
 
-    // ติดตามเรื่องด้วยรหัส
-    // รองรับรหัสใหม่ (CRMS6QRxxxxxx) และรหัสรูปแบบเดิม (CRxxxxxx) ที่ออกไปแล้ว
-    const m = /(CRMS6QR[A-Z0-9]{6}|CR[A-Z0-9]{6})/i.exec(text.replace(/[\s-]/g, ''));
-    if (m) {
-      const code = m[1].toUpperCase();
-      const issue = await db.get('issues', code);
-      if (!issue) { await lineReply(ev.replyToken, [{ type: 'text', text: `ไม่พบรหัสเรื่อง ${code} กรุณาตรวจสอบอีกครั้ง` }]); continue; }
-      if (src.userId && !(issue.lineSubs || []).includes(src.userId)) {
-        issue.lineSubs = [...(issue.lineSubs || []), src.userId].slice(-10);
-        await db.put('issues', issue);
-      }
-      await lineReply(ev.replyToken, [{ type: 'text', text: issueText(issue, '✅ เริ่มติดตามเรื่องแล้ว จะแจ้งเตือนเมื่อมีความคืบหน้า') }]);
-      continue;
-    }
     if (src.type === 'user') await lineReply(ev.replyToken, [{ type: 'text', text: help() }]);
   }
   return new Response('ok');

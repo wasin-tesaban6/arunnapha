@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { PageHero } from '@/components/Cards';
 import Icon from '@/components/Icon';
 import { getSettings, getReportStats } from '@/lib/data';
@@ -21,7 +20,6 @@ export default async function ReportPage() {
             <div className="card stat"><div className="v" style={{ color: '#64748b' }}>{stats.received}</div><div className="l">รับเรื่อง</div></div>
             <div className="card stat"><div className="v" style={{ color: 'var(--ok)' }}>{stats.done}</div><div className="l">เสร็จสิ้น</div></div>
           </div>
-          <div className="center"><Link href="/track" className="btn ghost sm">มีรหัสเรื่องแล้ว? ติดตามความคืบหน้า →</Link></div>
 
           <div className="card pad center stack" style={{ maxWidth: 820, margin: '0 auto', width: '100%' }}>
             <h2 style={{ margin: 0, fontSize: 34 }}>{t.reportScanTitle}</h2>
