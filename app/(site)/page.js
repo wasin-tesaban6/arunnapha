@@ -3,16 +3,17 @@ import Icon from '@/components/Icon';
 import HeroSlider from '@/components/HeroSlider';
 import { MemberCard, EventItem, ProductCard, Empty } from '@/components/Cards';
 import { OppCard, VolunteerCard } from '@/components/WorksHub';
-import { getSettings, getMembers, getEvents, getMarket, getIssueStats, getOpportunities, getVolunteer } from '@/lib/data';
+import { getSettings, getMembers, getEvents, getMarket, getReportStats, getOpportunities, getVolunteer } from '@/lib/data';
 import { todayISO } from '@/lib/constants';
 
 export const revalidate = 60;
 
 
 export default async function Home() {
-  const [s, members, events, market, stats, opps, volunteer] = await Promise.all([
-    getSettings(), getMembers(), getEvents(), getMarket(), getIssueStats(), getOpportunities(), getVolunteer(),
+  const [s, members, events, market, opps, volunteer] = await Promise.all([
+    getSettings(), getMembers(), getEvents(), getMarket(), getOpportunities(), getVolunteer(),
   ]);
+  const stats = await getReportStats(s);
   const t = s.texts;
   const today = todayISO();
   const upcoming = events.filter((e) => (e.endDate || e.date) >= today).slice(0, 4);
@@ -105,11 +106,10 @@ export default async function Home() {
               <div><div className="kicker">{t.statsKicker}</div><h2 style={{ fontSize: 38 }}>{t.statsTitle}</h2></div>
               <Link href="/track">ติดตามเรื่อง →</Link>
             </div>
-            <div className="grid stats" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-              <div className="card stat"><div className="v">{stats.total}</div><div className="l">เรื่องที่แจ้งทั้งหมด</div></div>
-              <div className="card stat"><div className="v" style={{ color: 'var(--ok)' }}>{stats.done}</div><div className="l">แก้ไขเสร็จแล้ว</div></div>
-              <div className="card stat"><div className="v" style={{ color: 'var(--sky-500)' }}>{stats.in_progress + stats.reviewing}</div><div className="l">กำลังดำเนินการ</div></div>
-              <div className="card stat"><div className="v" style={{ color: '#64748b' }}>{stats.received}</div><div className="l">รอรับเรื่อง</div></div>
+            <div className="grid stats" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+              <div className="card stat"><div className="v">{stats.total}</div><div className="l">แจ้งทั้งหมด</div></div>
+              <div className="card stat"><div className="v" style={{ color: '#64748b' }}>{stats.received}</div><div className="l">รับเรื่อง</div></div>
+              <div className="card stat"><div className="v" style={{ color: 'var(--ok)' }}>{stats.done}</div><div className="l">เสร็จสิ้น</div></div>
             </div>
           </div>
         </div>

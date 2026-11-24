@@ -321,6 +321,7 @@ label.f .hint { font-weight: 400; color: var(--muted); font-size: 17px; }
 .stat .v { font-size: 44px; font-weight: 700; line-height: 1; color: var(--navy-800); }
 .stat .l { color: var(--muted); font-size: 18px; }
 @media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.line-qr { width: min(320px, 80%); height: auto; margin: 6px auto; border-radius: 16px; border: 1px solid var(--line); background: #fff; padding: 10px; image-rendering: auto; }
 .steps { display: flex; justify-content: space-between; position: relative; margin: 20px 0 10px; }
 .steps::before { content: ''; position: absolute; left: 8%; right: 8%; top: 22px; height: 4px; background: var(--line); border-radius: 4px; }
 .steps .bar { position: absolute; left: 8%; top: 22px; height: 4px; background: var(--sky-500); border-radius: 4px; transition: width .6s ease; }

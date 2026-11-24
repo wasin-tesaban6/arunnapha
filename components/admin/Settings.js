@@ -122,6 +122,26 @@ export default function Settings() {
 
       <div className="card pad form">
         <h3 style={{ margin: 0 }}>แจ้งปัญหา</h3>
+        <div className="two">
+          <div className="f" style={{ fontWeight: 700, color: 'var(--navy-800)' }}>ภาพ QR Code LINE สำหรับแจ้งปัญหา
+            <span className="hint" style={{ display: 'block' }}>แสดงในหน้า “แจ้งปัญหา” ให้สแกนเพิ่มเพื่อน LINE</span>
+            <ImageUpload value={f.reportLineQr || ''} onChange={(v) => setF((p) => ({ ...p, reportLineQr: v }))} folder="brand" size={900} label="อัปโหลด QR" />
+          </div>
+          <label className="f">ลิงก์ LINE (ปุ่ม “เปิด LINE / เพิ่มเพื่อน”)
+            <span className="hint">เช่น https://lin.ee/xxxx — สำหรับคนที่เปิดเว็บบนมือถือ</span>
+            <input className="input" type="url" value={f.reportLineUrl || ''} onChange={set('reportLineUrl')} placeholder="https://lin.ee/..." />
+          </label>
+        </div>
+        <div className="f" style={{ fontWeight: 700, color: 'var(--navy-800)' }}>ตัวเลขสถิติบนเว็บ <span className="hint">(เว้นว่าง = นับอัตโนมัติจากระบบ)</span>
+          <div className="row" style={{ gap: 10 }}>
+            {[['total', 'แจ้งทั้งหมด'], ['received', 'รับเรื่อง'], ['done', 'เสร็จสิ้น']].map(([k, l]) => (
+              <label key={k} className="f" style={{ fontWeight: 400, flex: '1 1 140px' }}>{l}
+                <input className="input" inputMode="numeric" value={f.issueStatsOverride?.[k] ?? ''} placeholder="อัตโนมัติ"
+                  onChange={(e) => { const v = e.target.value.replace(/\D/g, '').slice(0, 7); setF((p) => ({ ...p, issueStatsOverride: { ...(p.issueStatsOverride || {}), [k]: v } })); }} />
+              </label>
+            ))}
+          </div>
+        </div>
         <label className="f">หมวดปัญหา <span className="hint">(บรรทัดละ 1 หมวด)</span>
           <textarea className="textarea" value={(f.issueCategories || []).join('\n')} onChange={(e) => setF((p) => ({ ...p, issueCategories: e.target.value.split('\n') }))} /></label>
       </div>

@@ -38,6 +38,9 @@ export async function POST(req) {
     contact: Object.fromEntries(['facebook', 'instagram', 'line', 'email', 'tiktok'].map((k) => [k, str(b.contact?.[k], 300)])),
     marketRules: str(b.marketRules, 8000),
     marketPickup: str(b.marketPickup, 300),
+    reportLineQr: img(b.reportLineQr, 700),
+    reportLineUrl: /^https:\/\/\S+$/.test(String(b.reportLineUrl || '').trim()) ? str(b.reportLineUrl, 300) : '',
+    issueStatsOverride: Object.fromEntries(['total', 'received', 'done'].map((k) => [k, /^\d{1,7}$/.test(String(b.issueStatsOverride?.[k] ?? '').trim()) ? String(b.issueStatsOverride[k]).trim() : ''])),
     volunteerAutoApprove: b.volunteerAutoApprove === undefined ? Boolean(cur.volunteerAutoApprove) : Boolean(b.volunteerAutoApprove),
     issueCategories: Array.isArray(b.issueCategories) ? b.issueCategories.map((x) => str(x, 60)).filter(Boolean).slice(0, 30) : cur.issueCategories,
   };
