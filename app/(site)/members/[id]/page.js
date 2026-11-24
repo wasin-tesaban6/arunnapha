@@ -38,10 +38,6 @@ export default async function MemberPage({ params }) {
               <div className="row"><span className="badge solid">{m.position || 'สมาชิกพรรค'}</span>{m.nickname ? <span className="badge">ชื่อเล่น: {m.nickname}</span> : null}</div>
               <blockquote style={{ margin: 0, fontSize: 30, color: 'var(--navy-800)', fontWeight: 700, lineHeight: 1.25 }}>“{m.quote || '–'}”</blockquote>
               <div className="card pad">
-                <h3 style={{ fontSize: 26 }}>ประวัติส่วนตัว</h3>
-                <p className="pre" style={{ margin: 0 }}>{m.bio || '–'}</p>
-              </div>
-              <div className="card pad">
                 <h3 style={{ fontSize: 26 }}>🏅 ผลงาน</h3>
                 <p className="pre" style={{ margin: 0 }}>{m.achievements || '–'}</p>
               </div>

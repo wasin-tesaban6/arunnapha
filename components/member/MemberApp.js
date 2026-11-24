@@ -26,7 +26,6 @@ function Profile() {
           </div>
         </div>
         <label className="f">คำคมสั้น ๆ<input className="input" value={f.quote || ''} onChange={set('quote')} maxLength={200} /></label>
-        <label className="f">ประวัติส่วนตัวเบื้องต้น<textarea className="textarea" style={{ minHeight: 140 }} value={f.bio || ''} onChange={set('bio')} /></label>
         <label className="f">ผลงาน <span className="hint">(เขียนสั้น ๆ บรรทัดละ 1 ผลงาน)</span><textarea className="textarea" value={f.achievements || ''} onChange={set('achievements')} maxLength={4000} placeholder={'• รางวัลนักเรียนพระราชทาน ปีการศึกษา 2568\n• เกียรติบัตร All For One University'} /></label>
         <label className="f">ประสบการณ์ทำงาน <span className="hint">(บรรทัดละ 1 รายการ)</span><textarea className="textarea" value={f.experience || ''} onChange={set('experience')} maxLength={4000} placeholder={'• ประธานนักเรียน ม.ต้น ปี 2567\n• ทีมงานกีฬาสีโรงเรียน'} /></label>
         <label className="f">ช่องทางติดต่อ <span className="hint">(บรรทัดละ 1 ช่องทาง)</span><textarea className="textarea" style={{ minHeight: 70 }} value={f.contact || ''} onChange={set('contact')} /></label>

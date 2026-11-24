@@ -7,7 +7,7 @@ import { ok, fail, body, refresh, str } from '@/lib/api';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-const FIELDS = ['name', 'nickname', 'position', 'order', 'classroom', 'quote', 'bio', 'achievements', 'experience', 'contact'];
+const FIELDS = ['name', 'nickname', 'position', 'order', 'classroom', 'quote', 'achievements', 'experience', 'contact'];
 const ABC = 'abcdefghjkmnpqrstuvwxyz23456789';
 const genPassword = () => Array.from(crypto.randomBytes(8), (b) => ABC[b % ABC.length]).join('');
 

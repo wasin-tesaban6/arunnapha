@@ -44,9 +44,8 @@ export default async function ProductPage({ params }) {
               <h3 style={{ fontSize: 24 }}>ข้อมูลผู้ขาย</h3>
               <div><b>{p.sellerName}</b> {p.sellerClass ? `· ชั้น ${p.sellerClass}` : ''}</div>
               <div>ติดต่อ: {/^https?:\/\//.test(contact) ? <a href={contact} target="_blank" rel="noopener">{contact}</a> : contact}</div>
-              <div className="xs muted" style={{ marginTop: 6 }}>📍 จุดนัดรับ: {s.marketPickup || '–'}</div>
             </div>
-            <div className="alert info small">💡 แนะนำให้ชำระเงินเมื่อได้รับสินค้าแล้ว และนัดรับภายในโรงเรียนเท่านั้น · <Link href="/market/rules">อ่านเงื่อนไข</Link></div>
+            <div className="alert info small">💡 ผู้ซื้อและผู้ขายตกลงนัดรับสินค้ากันเอง · แนะนำให้ชำระเงินเมื่อได้รับสินค้าแล้ว · <Link href="/market/rules">อ่านเงื่อนไข</Link></div>
           </div>
         </div>
       </section>

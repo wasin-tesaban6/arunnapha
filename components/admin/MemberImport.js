@@ -14,7 +14,6 @@ const COLS = [
   { key: 'classroom', label: 'ชั้น', alias: ['ชั้น', 'ห้อง', 'ชั้น/ห้อง', 'class', 'classroom'] },
   { key: 'order', label: 'ลำดับ', alias: ['ลำดับ', 'ลำดับแสดง', 'order', 'no', 'ที่'] },
   { key: 'quote', label: 'คำคม', alias: ['คำคม', 'คำคมสั้นๆ', 'คำคมสั้น ๆ', 'quote'] },
-  { key: 'bio', label: 'ประวัติ', alias: ['ประวัติ', 'ประวัติส่วนตัว', 'bio'] },
   { key: 'achievements', label: 'ผลงาน', alias: ['ผลงาน', 'achievements', 'awards'] },
   { key: 'experience', label: 'ประสบการณ์ทำงาน', alias: ['ประสบการณ์ทำงาน', 'ประสบการณ์', 'experience'] },
   { key: 'contact', label: 'ช่องทางติดต่อ', alias: ['ช่องทางติดต่อ', 'ติดต่อ', 'contact'] },
@@ -103,8 +102,8 @@ export default function MemberImport({ existing, onClose, onDone }) {
 
   const template = () => downloadCSV('แม่แบบนำเข้าสมาชิก.csv', [
     COLS.map((c) => c.label),
-    ['นายตัวอย่าง ใจดี', 'ต้น', 'ประธานสภานักเรียน', 'ม.6/1', '1', 'ทำดีเพื่อทุกคน', '', 'รางวัลนักเรียนพระราชทาน', 'ประธานนักเรียน ม.ต้น', 'IG: example', 'president', ''],
-    ['นางสาวสมมติ เรียนดี', 'มิ้นท์', 'ฝ่ายวิชาการ', 'ม.5/2', '2', '', '', '', '', '', 'academic01', 'mint2569'],
+    ['นายตัวอย่าง ใจดี', 'ต้น', 'ประธานสภานักเรียน', 'ม.6/1', '1', 'ทำดีเพื่อทุกคน', 'รางวัลนักเรียนพระราชทาน', 'ประธานนักเรียน ม.ต้น', 'IG: example', 'president', ''],
+    ['นางสาวสมมติ เรียนดี', 'มิ้นท์', 'ฝ่ายวิชาการ', 'ม.5/2', '2', '', '', '', '', 'academic01', 'mint2569'],
   ]);
   const credentials = () => downloadCSV(`บัญชีสมาชิก-${new Date().toISOString().slice(0, 10)}.csv`, [
     ['ชื่อ-นามสกุล', 'ชื่อผู้ใช้', 'รหัสผ่าน', 'สถานะ', 'เข้าระบบที่'],

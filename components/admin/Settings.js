@@ -128,7 +128,6 @@ export default function Settings() {
 
       <div className="card pad form">
         <h3 style={{ margin: 0 }}>ตลาดนัดออนไลน์</h3>
-        <label className="f">จุดนัดรับสินค้า<input className="input" value={f.marketPickup} onChange={set('marketPickup')} /></label>
         <label className="f">เงื่อนไขการฝากขาย<textarea className="textarea" style={{ minHeight: 300 }} value={f.marketRules} onChange={set('marketRules')} /></label>
       </div>
       <div className="row" style={{ justifyContent: 'flex-end' }}><button className="btn" disabled={busy}>{busy ? 'กำลังบันทึก...' : 'บันทึกทั้งหมด'}</button></div>

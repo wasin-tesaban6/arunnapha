@@ -17,7 +17,7 @@ export default async function MarketPage() {
           <div className="cta" style={{ marginBottom: 34, padding: 28 }}>
             <div>
               <h2 style={{ fontSize: 34 }}>อยากขายของ? ฝากขายกับสภาได้เลย</h2>
-              <p>ส่งประกาศ → สภาตรวจสอบ/อนุมัติ → แสดงบนเว็บ 30 วัน · จุดนัดรับ: {s.marketPickup || '–'}</p>
+              <p>ส่งประกาศ → สภาตรวจสอบ/อนุมัติ → แสดงบนเว็บ 30 วัน · ผู้ซื้อและผู้ขายตกลงนัดรับสินค้ากันเอง</p>
             </div>
             <div className="row" style={{ position: 'relative', zIndex: 1 }}>
               <Link href="/market/sell" className="btn gold">ฝากขายสินค้า</Link>
