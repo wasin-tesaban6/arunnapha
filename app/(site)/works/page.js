@@ -1,19 +1,17 @@
 import { PageHero } from '@/components/Cards';
-import WorksBrowser from '@/components/WorksBrowser';
-import { getMembers, getWorks } from '@/lib/data';
+import WorksHub from '@/components/WorksHub';
+import { getSettings, getVolunteer, getOpportunities } from '@/lib/data';
 
 export const revalidate = 60;
-export const metadata = { title: 'ศูนย์รวมผลงาน จิตอาสาวิชาการ' };
+export const metadata = { title: 'จิตอาสาวิชาการ & ศูนย์รวมผลงาน' };
 
 export default async function WorksPage() {
-  const [works, members] = await Promise.all([getWorks(), getMembers()]);
-  const slim = members.map(({ id, name, position, photo, nickname }) => ({ id, name, position, photo, nickname }));
-  const list = works.map(({ description, ...w }) => ({ ...w, images: w.images?.slice(0, 1) || [] }));
+  const [s, volunteer, opportunities] = await Promise.all([getSettings(), getVolunteer(), getOpportunities()]);
   return (
     <>
-      <PageHero title="จิตอาสาวิชาการ & ศูนย์รวมผลงาน" sub="แหล่งเก็บผลงาน กิจกรรม และโครงการของสมาชิกสภาแต่ละคน" />
+      <PageHero title={s.texts.worksTitlePage} sub={s.texts.worksSub} />
       <section className="section">
-        <div className="container"><WorksBrowser works={list} members={slim} /></div>
+        <div className="container"><WorksHub volunteer={volunteer} opportunities={opportunities} t={s.texts} /></div>
       </section>
     </>
   );

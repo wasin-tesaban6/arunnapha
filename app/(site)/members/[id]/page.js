@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Icon from '@/components/Icon';
-import { WorkCard, Empty } from '@/components/Cards';
-import { getMember, getWorks } from '@/lib/data';
+import { getMember } from '@/lib/data';
 
 export const revalidate = 60;
 export function generateStaticParams() { return []; }
@@ -15,9 +14,8 @@ export async function generateMetadata({ params }) {
 
 export default async function MemberPage({ params }) {
   const { id } = await params;
-  const [m, works] = await Promise.all([getMember(id), getWorks()]);
+  const m = await getMember(id);
   if (!m) notFound();
-  const mine = works.filter((w) => w.memberId === m.id);
   const contactLines = (m.contact || '').split('\n').filter(Boolean);
   return (
     <>
@@ -43,6 +41,14 @@ export default async function MemberPage({ params }) {
                 <h3 style={{ fontSize: 26 }}>ประวัติส่วนตัว</h3>
                 <p className="pre" style={{ margin: 0 }}>{m.bio || '–'}</p>
               </div>
+              <div className="card pad">
+                <h3 style={{ fontSize: 26 }}>🏅 ผลงาน</h3>
+                <p className="pre" style={{ margin: 0 }}>{m.achievements || '–'}</p>
+              </div>
+              <div className="card pad">
+                <h3 style={{ fontSize: 26 }}>💼 ประสบการณ์ทำงาน</h3>
+                <p className="pre" style={{ margin: 0 }}>{m.experience || '–'}</p>
+              </div>
               {contactLines.length ? (
                 <div className="card pad">
                   <h3 style={{ fontSize: 26 }}>ช่องทางติดต่อ</h3>
@@ -51,13 +57,6 @@ export default async function MemberPage({ params }) {
               ) : null}
             </div>
           </div>
-
-          <div className="section-head" style={{ marginTop: 50 }}>
-            <div><div className="kicker">ผลงาน</div><h2>ผลงานของ {m.nickname || m.name} ({mine.length})</h2></div>
-          </div>
-          {mine.length ? (
-            <div className="grid works-grid">{mine.map((w) => <WorkCard key={w.id} w={w} />)}</div>
-          ) : <Empty icon="award" title="ยังไม่มีผลงาน" />}
         </div>
       </section>
     </>

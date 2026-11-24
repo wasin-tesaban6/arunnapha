@@ -2,11 +2,9 @@
 import { useEffect, useState } from 'react';
 import Icon from '../Icon';
 import ImageUpload from '../ImageUpload';
-import WorkEditor from '../portal/WorkEditor';
 import { QuestionRow } from '../admin/Questions';
 import { useList, Toaster, toast, logout, useSubmit, useForm, Loading } from '../portal/ui';
 import { api } from '@/lib/client';
-import { thDate } from '@/lib/constants';
 
 function Profile() {
   const [f, setF] = useState(null);
@@ -28,45 +26,14 @@ function Profile() {
           </div>
         </div>
         <label className="f">คำคมสั้น ๆ<input className="input" value={f.quote || ''} onChange={set('quote')} maxLength={200} /></label>
-        <label className="f">ประวัติส่วนตัวเบื้องต้น<textarea className="textarea" style={{ minHeight: 180 }} value={f.bio || ''} onChange={set('bio')} /></label>
+        <label className="f">ประวัติส่วนตัวเบื้องต้น<textarea className="textarea" style={{ minHeight: 140 }} value={f.bio || ''} onChange={set('bio')} /></label>
+        <label className="f">ผลงาน <span className="hint">(เขียนสั้น ๆ บรรทัดละ 1 ผลงาน)</span><textarea className="textarea" value={f.achievements || ''} onChange={set('achievements')} maxLength={4000} placeholder={'• รางวัลนักเรียนพระราชทาน ปีการศึกษา 2568\n• เกียรติบัตร All For One University'} /></label>
+        <label className="f">ประสบการณ์ทำงาน <span className="hint">(บรรทัดละ 1 รายการ)</span><textarea className="textarea" value={f.experience || ''} onChange={set('experience')} maxLength={4000} placeholder={'• ประธานนักเรียน ม.ต้น ปี 2567\n• ทีมงานกีฬาสีโรงเรียน'} /></label>
         <label className="f">ช่องทางติดต่อ <span className="hint">(บรรทัดละ 1 ช่องทาง)</span><textarea className="textarea" style={{ minHeight: 70 }} value={f.contact || ''} onChange={set('contact')} /></label>
         {err ? <div className="alert err">{err}</div> : null}
         <div><button className="btn" disabled={busy}>{busy ? 'กำลังบันทึก...' : 'บันทึกโปรไฟล์'}</button></div>
       </div>
     </form>
-  );
-}
-
-function MyWorks() {
-  const list = useList('/api/member/works');
-  const [edit, setEdit] = useState(null);
-  if (!list.items) return <Loading />;
-  return (
-    <>
-      <div className="top">
-        <div><h2 style={{ margin: 0 }}>ผลงานของฉัน</h2><div className="muted small">อัปโหลดผลงาน รูปภาพ และเขียนคำอธิบาย — แสดงในหน้าศูนย์รวมผลงานทันที</div></div>
-        <button className="btn" onClick={() => setEdit({})}><Icon name="plus" size={20} /> เพิ่มผลงาน</button>
-      </div>
-      {list.items.length ? (
-        <div className="grid works-grid">
-          {list.items.map((w) => (
-            <div key={w.id} className="card work">
-              <div className="cover">{w.images?.[0] ? <img src={w.images[0]} alt="" /> : <Icon name="award" size={48} />}</div>
-              <div className="body">
-                <div className="row" style={{ gap: 8 }}><span className="badge">{w.category}</span><span className="xs muted">{thDate(w.date)}</span>{w.hidden ? <span className="badge">ซ่อน</span> : null}</div>
-                <h3>{w.title}</h3>
-                <div className="row" style={{ marginTop: 'auto', paddingTop: 10 }}>
-                  <button className="btn sm ghost" onClick={() => setEdit(w)}><Icon name="edit" size={16} /> แก้ไข</button>
-                  <a className="btn sm ghost" href={`/works/${w.id}`} target="_blank" rel="noopener"><Icon name="eye" size={16} /></a>
-                  <button className="btn sm danger" onClick={() => list.remove(w.id, w.title)}><Icon name="trash" size={16} /></button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : <div className="empty">ยังไม่มีผลงาน — กด “เพิ่มผลงาน” เพื่อเริ่มต้น</div>}
-      {edit ? <WorkEditor item={edit.id ? edit : null} onSave={list.save} onClose={() => setEdit(null)} /> : null}
-    </>
   );
 }
 
@@ -104,10 +71,10 @@ function Password() {
   );
 }
 
-const TABS = [['profile', 'โปรไฟล์ของฉัน', 'user'], ['works', 'ผลงานของฉัน', 'award'], ['answer', 'ตอบคำถาม', 'chat'], ['password', 'เปลี่ยนรหัสผ่าน', 'lock']];
+const TABS = [['profile', 'โปรไฟล์ของฉัน', 'user'], ['answer', 'ตอบคำถาม', 'chat'], ['password', 'เปลี่ยนรหัสผ่าน', 'lock']];
 
 export default function MemberApp({ logo, name, position }) {
-  const [tab, setTab] = useState('works');
+  const [tab, setTab] = useState('profile');
   return (
     <div className="portal">
       <aside>
@@ -120,7 +87,6 @@ export default function MemberApp({ logo, name, position }) {
       </aside>
       <main>
         {tab === 'profile' ? <Profile /> : null}
-        {tab === 'works' ? <MyWorks /> : null}
         {tab === 'answer' ? <Answer /> : null}
         {tab === 'password' ? <Password /> : null}
       </main>

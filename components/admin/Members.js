@@ -9,7 +9,7 @@ import MemberImport from './MemberImport';
 function MemberEditor({ item, nextOrder, onSave, onClose }) {
   const [f, set] = useForm({
     id: item?.id, name: item?.name || '', nickname: item?.nickname || '', position: item?.position || '', order: item?.order ?? nextOrder,
-    classroom: item?.classroom || '', quote: item?.quote || '', bio: item?.bio || '', photo: item?.photo || '', contact: item?.contact || '',
+    classroom: item?.classroom || '', quote: item?.quote || '', bio: item?.bio || '', achievements: item?.achievements || '', experience: item?.experience || '', photo: item?.photo || '', contact: item?.contact || '',
     active: item?.active ?? true, username: item?.username || '', newPassword: '',
   });
   const { busy, err, onSubmit } = useSubmit(async () => { await onSave(f); onClose(); });
@@ -35,7 +35,9 @@ function MemberEditor({ item, nextOrder, onSave, onClose }) {
           </div>
         </div>
         <label className="f">คำคมสั้น ๆ<input className="input" value={f.quote} onChange={set('quote')} maxLength={200} /></label>
-        <label className="f">ประวัติส่วนตัวเบื้องต้น<textarea className="textarea" value={f.bio} onChange={set('bio')} maxLength={4000} placeholder="ความสามารถ ผลงานเด่น ประสบการณ์ ความตั้งใจ..." /></label>
+        <label className="f">ประวัติส่วนตัวเบื้องต้น<textarea className="textarea" value={f.bio} onChange={set('bio')} maxLength={4000} placeholder="ความสามารถ ความสนใจ ความตั้งใจ..." /></label>
+        <label className="f">ผลงาน <span className="hint">(เขียนสั้น ๆ บรรทัดละ 1 ผลงาน)</span><textarea className="textarea" value={f.achievements} onChange={set('achievements')} maxLength={4000} placeholder={'• รางวัลนักเรียนพระราชทาน ปีการศึกษา 2568\n• เกียรติบัตร All For One University'} /></label>
+        <label className="f">ประสบการณ์ทำงาน <span className="hint">(บรรทัดละ 1 รายการ)</span><textarea className="textarea" value={f.experience} onChange={set('experience')} maxLength={4000} placeholder={'• ประธานนักเรียน ม.ต้น ปี 2567\n• ทีมงานกีฬาสีโรงเรียน'} /></label>
         <label className="f">ช่องทางติดต่อ <span className="hint">(บรรทัดละ 1 ช่องทาง ลิงก์จะกดได้)</span><textarea className="textarea" style={{ minHeight: 70 }} value={f.contact} onChange={set('contact')} /></label>
         <label className="check"><input type="checkbox" checked={f.active} onChange={set('active')} /> แสดงบนหน้าเว็บ (ยกเลิกเพื่อซ่อน และปิดการเข้าสู่ระบบ)</label>
         <div className="card pad" style={{ background: 'var(--sky-50)' }}>

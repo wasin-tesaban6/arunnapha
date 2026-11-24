@@ -2,19 +2,19 @@ import { PageHero } from '@/components/Cards';
 import Calendar from '@/components/Calendar';
 import AskForm from '@/components/AskForm';
 import QAList from '@/components/QAList';
-import { getEvents, getQuestions } from '@/lib/data';
+import { getEvents, getQuestions, getSettings } from '@/lib/data';
 import { todayISO } from '@/lib/constants';
 
 export const revalidate = 60;
 export const metadata = { title: 'ปฏิทินวิชาการ' };
 
 export default async function CalendarPage() {
-  const [events, qs] = await Promise.all([getEvents(), getQuestions()]);
+  const [events, qs, s] = await Promise.all([getEvents(), getQuestions(), getSettings()]);
   const slim = events.map(({ id, title, date, endDate, time, location, category }) => ({ id, title, date, endDate, time, location, category }));
   const general = qs.filter((q) => !q.eventId).slice(0, 20);
   return (
     <>
-      <PageHero title="สื่อสารฉับไว · ปฏิทินวิชาการ" sub="ข่าวสาร กิจกรรม และช่องทางสอบถาม สร้างปฏิสัมพันธ์ในรั้วฟ้าขาวระหว่างบุคลากรและนักเรียน" />
+      <PageHero title={s.texts.calendarTitle} sub={s.texts.calendarSub} />
       <section className="section">
         <div className="container">
           <Calendar events={slim} today={todayISO()} />

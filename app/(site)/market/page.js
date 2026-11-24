@@ -11,7 +11,7 @@ export default async function MarketPage() {
   const slim = items.map((p) => ({ ...p, images: p.images?.slice(0, 1) || [], description: (p.description || '').slice(0, 200) }));
   return (
     <>
-      <PageHero title="ตลาดนัดออนไลน์ CRMS6" sub="ส่งเสริมการขาย สร้างรายได้ให้แก่นักเรียน — ฝากขายสินค้าบนเว็บสภา นัดรับในโรงเรียน" />
+      <PageHero title={s.texts.marketTitlePage} sub={s.texts.marketSub} />
       <section className="section">
         <div className="container">
           <div className="cta" style={{ marginBottom: 34, padding: 28 }}>

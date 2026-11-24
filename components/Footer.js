@@ -14,11 +14,11 @@ export default function Footer({ s }) {
             <div className="row" style={{ marginBottom: 10 }}>
               <img src={s.logoUrl || '/logo.svg'} alt="" width="56" height="56" style={{ background: '#fff', borderRadius: '50%', padding: 4 }} />
               <div>
-                <h4 style={{ margin: 0 }}>CRMS6 | {s.partyName}</h4>
+                <h4 style={{ margin: 0 }}>{s.texts.brandName}</h4>
                 <div className="small">{s.councilName} {s.schoolName}</div>
               </div>
             </div>
-            <p className="small" style={{ maxWidth: 420 }}>“{s.schoolMotto}” — ร่วมสร้างรั้วฟ้าขาวให้น่าอยู่ไปด้วยกัน</p>
+            <p className="small pre" style={{ maxWidth: 420 }}>{s.schoolMotto ? `“${s.schoolMotto}” — ` : ''}{s.texts.footerText}</p>
           </div>
           <div>
             <h4>เมนู</h4>

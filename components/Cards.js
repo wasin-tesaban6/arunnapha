@@ -43,29 +43,6 @@ export function MemberCard({ m, lead = false }) {
   );
 }
 
-export function WorkCard({ w, member }) {
-  return (
-    <Link href={`/works/${w.id}`} className="card hover work">
-      <div className="cover">
-        {w.images?.[0] ? <img src={w.images[0]} alt={w.title} loading="lazy" decoding="async" /> : <Icon name="award" size={56} stroke={1.3} />}
-      </div>
-      <div className="body">
-        <div className="row" style={{ gap: 8 }}>
-          <span className="badge">{w.category}</span>
-          {w.date ? <span className="xs muted">{thDate(w.date)}</span> : null}
-        </div>
-        <h3>{w.title}</h3>
-        {member ? (
-          <div className="by">
-            {member.photo ? <img src={member.photo} alt="" loading="lazy" /> : <span className="mini-av" />}
-            <span>{member.name}{member.position ? ` · ${member.position}` : ''}</span>
-          </div>
-        ) : null}
-      </div>
-    </Link>
-  );
-}
-
 export function ProductCard({ p }) {
   return (
     <Link href={`/market/${p.id}`} className="card hover product">

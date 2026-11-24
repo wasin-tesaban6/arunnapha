@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import { requireAdmin } from '@/lib/auth';
 import { getSettings } from '@/lib/data';
 import { ok, fail, body, refresh, str, img, imgs } from '@/lib/api';
+import { TEXT_FIELDS } from '@/lib/texts';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,12 @@ export async function POST(req) {
     logoUrl: img(b.logoUrl) || '/logo.svg',
     heroImage: img(b.heroImage, 900),
     heroSlides: Array.isArray(b.heroSlides) ? imgs(b.heroSlides, 8) : cur.heroSlides,
+    texts: b.texts && typeof b.texts === 'object'
+      ? Object.fromEntries(TEXT_FIELDS.map(([k, , , , long]) => [k, str(b.texts[k], long ? 1000 : 200)]))
+      : cur.texts,
+    features: Array.isArray(b.features)
+      ? [0, 1, 2, 3].map((i) => ({ title: str(b.features[i]?.title, 100), sub: str(b.features[i]?.sub, 150), text: str(b.features[i]?.text, 500), go: str(b.features[i]?.go, 60) }))
+      : cur.features,
     announcement: str(b.announcement, 400),
     contact: Object.fromEntries(['facebook', 'instagram', 'line', 'email', 'tiktok'].map((k) => [k, str(b.contact?.[k], 300)])),
     marketRules: str(b.marketRules, 8000),

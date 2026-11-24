@@ -1,26 +1,23 @@
 import Link from 'next/link';
 import Icon from '@/components/Icon';
 import HeroSlider from '@/components/HeroSlider';
-import { MemberCard, WorkCard, EventItem, ProductCard, Empty } from '@/components/Cards';
-import { getSettings, getMembers, getWorks, getEvents, getMarket, getIssueStats } from '@/lib/data';
+import { MemberCard, EventItem, ProductCard, Empty } from '@/components/Cards';
+import { OppCard, VolunteerCard } from '@/components/WorksHub';
+import { getSettings, getMembers, getEvents, getMarket, getIssueStats, getOpportunities, getVolunteer } from '@/lib/data';
 import { todayISO } from '@/lib/constants';
 
 export const revalidate = 60;
 
-const FEATURES = [
-  { n: 1, icon: 'heart', title: 'จิตอาสาวิชาการ', sub: 'ศูนย์รวมแหล่งเก็บผลงาน', text: 'รวบรวมผลงาน กิจกรรมจิตอาสา และโครงการของสมาชิกสภาแต่ละคน ให้ทุกคนเข้าถึงและตรวจสอบได้', href: '/works', go: 'ดูผลงานทั้งหมด' },
-  { n: 2, icon: 'calendar', title: 'สื่อสารฉับไว', sub: 'สร้างปฏิสัมพันธ์ในรั้วฟ้าขาว', text: 'ปฏิทินวิชาการ แจ้งข่าวสารกิจกรรม พร้อมช่องถาม-ตอบระหว่างบุคลากรและนักเรียนในแต่ละกิจกรรม', href: '/calendar', go: 'เปิดปฏิทิน' },
-  { n: 3, icon: 'qr', title: 'QR Code แจ้งปัญหา', sub: 'เช็คความคืบหน้าแบบ Real-Time', text: 'สแกนแจ้งปัญหาได้ทันที รับรหัสติดตาม และรับแจ้งเตือนความคืบหน้าผ่านแอปพลิเคชันไลน์', href: '/report', go: 'แจ้งปัญหา / ติดตาม' },
-  { n: 4, icon: 'shop', title: 'ตลาดออนไลน์', sub: 'ส่งเสริมการขาย สร้างรายได้', text: 'พื้นที่ฝากขายสินค้าของนักเรียนบนเว็บสภา ผ่านการตรวจสอบจากสภา นัดรับในโรงเรียนอย่างปลอดภัย', href: '/market', go: 'ไปตลาดนัด' },
-];
 
 export default async function Home() {
-  const [s, members, works, events, market, stats] = await Promise.all([
-    getSettings(), getMembers(), getWorks(), getEvents(), getMarket(), getIssueStats(),
+  const [s, members, events, market, stats, opps, volunteer] = await Promise.all([
+    getSettings(), getMembers(), getEvents(), getMarket(), getIssueStats(), getOpportunities(), getVolunteer(),
   ]);
+  const t = s.texts;
   const today = todayISO();
   const upcoming = events.filter((e) => (e.endDate || e.date) >= today).slice(0, 4);
-  const memberMap = Object.fromEntries(members.map((m) => [m.id, m]));
+  const openOpps = opps.filter((o) => o.status.key !== 'closed').slice(0, 6);
+  const nextVolunteer = volunteer.filter((v) => !v.date || v.date >= today).slice(0, 6);
   const policies = (s.policies || []).filter((p) => p.title || p.detail);
   const slides = (s.heroSlides || []).filter(Boolean).slice(0, 8);
 
@@ -30,12 +27,11 @@ export default async function Home() {
         <HeroSlider slides={slides} />
         <div className="container">
           <div>
-            <div className="eyebrow"><Icon name="sun" size={18} /> {s.councilName} {s.schoolName}</div>
-            <h1>พรรค<span className="party">{s.partyName}</span></h1>
+            <h1 className="hero-title">พรรค<span className="party">{s.partyName}</span></h1>
             <p className="slogan">{s.slogan || '–'}</p>
             <div className="row">
-              <Link href="/members" className="btn white">รู้จักสมาชิกพรรค <Icon name="arrow" size={20} /></Link>
-              <Link href="/report" className="btn gold"><Icon name="qr" size={20} /> แจ้งปัญหา</Link>
+              <Link href="/members" className="btn white">{t.heroBtnMembers} <Icon name="arrow" size={20} /></Link>
+              <Link href="/report" className="btn gold"><Icon name="qr" size={20} /> {t.heroBtnReport}</Link>
             </div>
           </div>
           <div className="hero-logo"><img src={s.logoUrl || '/logo.svg'} alt={`โลโก้พรรค${s.partyName}`} fetchPriority="high" /></div>
@@ -45,12 +41,12 @@ export default async function Home() {
       <section className="section" style={{ paddingTop: 30 }}>
         <div className="container">
           <div className="section-head">
-            <div><div className="kicker">โครงการเด่นของเรา</div><h2>4 ภารกิจ เพื่อรั้วฟ้าขาว</h2></div>
+            <div><div className="kicker">{t.featKicker}</div><h2>{t.featTitle}</h2></div>
           </div>
           <div className="grid features">
-            {FEATURES.map((f) => (
-              <Link key={f.n} href={f.href} className="card hover feature">
-                <span className="num">0{f.n}</span>
+            {s.features.map((f, i) => (
+              <Link key={i} href={f.href} className="card hover feature">
+                <span className="num">0{i + 1}</span>
                 <span className="ic"><Icon name={f.icon} size={30} /></span>
                 <h3>{f.title}</h3>
                 <div style={{ color: 'var(--blue-600)', fontWeight: 700, fontSize: 19 }}>{f.sub}</div>
@@ -65,7 +61,7 @@ export default async function Home() {
       <section className="section alt">
         <div className="container">
           <div className="section-head">
-            <div><div className="kicker">นโยบาย</div><h2>นโยบายพรรค{s.partyName}</h2></div>
+            <div><div className="kicker">{t.policyKicker}</div><h2>{t.policyTitle}</h2></div>
           </div>
           {s.about && s.about !== '–' ? <p className="pre" style={{ maxWidth: 860 }}>{s.about}</p> : null}
           <div className="grid policy-list">
@@ -82,7 +78,7 @@ export default async function Home() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <div><div className="kicker">ทีมของเรา</div><h2>สมาชิกพรรค{s.partyName}</h2></div>
+            <div><div className="kicker">{t.teamKicker}</div><h2>{t.teamTitle}</h2></div>
             <Link href="/members" className="btn ghost">ดูสมาชิกทั้งหมด ({members.length}) →</Link>
           </div>
           {members.length ? (
@@ -97,7 +93,7 @@ export default async function Home() {
         <div className="container grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 30 }}>
           <div>
             <div className="section-head">
-              <div><div className="kicker">สื่อสารฉับไว</div><h2 style={{ fontSize: 38 }}>กิจกรรมที่กำลังจะมาถึง</h2></div>
+              <div><div className="kicker">{t.eventsKicker}</div><h2 style={{ fontSize: 38 }}>{t.eventsTitle}</h2></div>
               <Link href="/calendar">ปฏิทินทั้งหมด →</Link>
             </div>
             <div className="card" style={{ padding: 8 }}>
@@ -106,7 +102,7 @@ export default async function Home() {
           </div>
           <div>
             <div className="section-head">
-              <div><div className="kicker">QR Code แจ้งปัญหา</div><h2 style={{ fontSize: 38 }}>สถิติการแจ้งปัญหา</h2></div>
+              <div><div className="kicker">{t.statsKicker}</div><h2 style={{ fontSize: 38 }}>{t.statsTitle}</h2></div>
               <Link href="/track">ติดตามเรื่อง →</Link>
             </div>
             <div className="grid stats" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
@@ -122,12 +118,17 @@ export default async function Home() {
       <section className="section">
         <div className="container">
           <div className="section-head">
-            <div><div className="kicker">จิตอาสาวิชาการ</div><h2>ผลงานล่าสุด</h2></div>
-            <Link href="/works" className="btn ghost">ศูนย์รวมผลงาน →</Link>
+            <div><div className="kicker">{t.worksKicker}</div><h2>{t.worksTitle}</h2></div>
+            <div className="row">
+              <Link href="/works" className="btn ghost">{t.volunteerTab} →</Link>
+              <Link href="/works?tab=opp" className="btn ghost">{t.oppTab} →</Link>
+            </div>
           </div>
-          {works.length ? (
-            <div className="grid works-grid">{works.slice(0, 6).map((w) => <WorkCard key={w.id} w={w} member={memberMap[w.memberId]} />)}</div>
-          ) : <Empty icon="award" title="ผลงานกำลังจะมาเร็ว ๆ นี้">สมาชิกสภาจะอัปโหลดผลงานผ่านระบบสมาชิก</Empty>}
+          {openOpps.length ? (
+            <div className="grid works-grid">{openOpps.map((o) => <OppCard key={o.id} o={o} />)}</div>
+          ) : nextVolunteer.length ? (
+            <div className="grid works-grid">{nextVolunteer.map((v) => <VolunteerCard key={v.id} v={v} today={today} />)}</div>
+          ) : <Empty icon="award" title="กิจกรรมกำลังจะมาเร็ว ๆ นี้">ติดตามกิจกรรมเก็บผลงานและจิตอาสาวิชาการได้ที่นี่</Empty>}
         </div>
       </section>
 
@@ -135,7 +136,7 @@ export default async function Home() {
         <section className="section alt">
           <div className="container">
             <div className="section-head">
-              <div><div className="kicker">ตลาดออนไลน์</div><h2>สินค้าจากเพื่อนนักเรียน</h2></div>
+              <div><div className="kicker">{t.marketKicker}</div><h2>{t.marketTitle}</h2></div>
               <Link href="/market" className="btn ghost">ดูทั้งหมด →</Link>
             </div>
             <div className="grid market-grid">{market.slice(0, 4).map((p) => <ProductCard key={p.id} p={p} />)}</div>
@@ -147,8 +148,8 @@ export default async function Home() {
         <div className="container">
           <div className="cta">
             <div>
-              <h2>พบปัญหาในโรงเรียน? แจ้งเราได้เลย</h2>
-              <p>สแกน QR Code ที่ติดตามจุดต่าง ๆ หรือกดแจ้งผ่านเว็บ แล้วติดตามความคืบหน้าแบบ Real-Time ผ่าน LINE</p>
+              <h2>{t.ctaTitle}</h2>
+              <p className="pre">{t.ctaText}</p>
             </div>
             <div className="row" style={{ position: 'relative', zIndex: 1 }}>
               <Link href="/report" className="btn gold">แจ้งปัญหา</Link>

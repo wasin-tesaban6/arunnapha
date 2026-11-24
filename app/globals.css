@@ -114,7 +114,8 @@ p { margin: 0 0 .8em; }
 .hero::after { content: ''; position: absolute; inset: auto 0 -1px 0; height: 90px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 90' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' d='M0 60c240 30 480 30 720 0s480-30 720 0v30H0z'/%3E%3C/svg%3E") bottom/100% 100% no-repeat; }
 .hero .container { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; padding-top: 70px; padding-bottom: 120px; }
 .hero h1 { color: #fff; margin-bottom: 8px; letter-spacing: .5px; }
-.hero h1 .party { display: block; font-size: 1.25em; background: linear-gradient(90deg, #fff, #ffe2b3); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero h1.hero-title { font-size: clamp(44px, 6.4vw, 88px); white-space: nowrap; line-height: 1.25; }
+.hero h1 .party { display: inline; margin-left: .22em; font-size: 1em; background: linear-gradient(90deg, #fff, #ffe2b3); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); padding: 4px 14px; border-radius: 999px; font-size: 18px; margin-bottom: 14px; }
 .hero .slogan { font-size: 28px; color: #e7f2ff; margin-bottom: 26px; }
 .hero-logo { justify-self: center; width: min(360px, 80%); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 50% 40%, rgba(255,255,255,.98), rgba(255,255,255,.85) 60%, rgba(255,255,255,.2) 61%, transparent 70%); display: grid; place-items: center; box-shadow: 0 0 0 14px rgba(255,255,255,.08), 0 0 0 30px rgba(255,255,255,.05), var(--shadow-lg); animation: float 6s ease-in-out infinite; }
@@ -227,6 +228,21 @@ p { margin: 0 0 .8em; }
 .work h3 { font-size: 24px; margin: 4px 0 0; }
 .work .by { display: flex; align-items: center; gap: 8px; font-size: 17px; color: var(--muted); margin-top: auto; padding-top: 8px; }
 .work .by img, .mini-av { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--sky-100); }
+/* จิตอาสาวิชาการ & ศูนย์รวมผลงาน */
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; border-bottom: 2px solid var(--line); }
+.tabs button { background: transparent; border: 0; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 18px; font-size: 24px; font-weight: 700; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.tabs button:hover { color: var(--navy-800); }
+.tabs button.on { color: var(--blue-600); border-bottom-color: var(--sky-500); }
+.tabs .n { font-size: 15px; background: var(--sky-100); color: var(--blue-700); border-radius: 999px; padding: 0 9px; }
+.tabs .live-n { background: #dcfce7; color: #166534; }
+.vcard { padding: 18px 20px; display: flex; flex-direction: column; gap: 4px; }
+.vcard h3 { font-size: 25px; margin: 6px 0 0; }
+.vcard.past { opacity: .72; }
+.vcard.opp { padding: 0; overflow: hidden; }
+.vcard.opp .cover { aspect-ratio: 16/9; background: var(--sky-50); overflow: hidden; }
+.vcard.opp .cover img { width: 100%; height: 100%; object-fit: cover; }
+.vcard.opp .vbody { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.vcard .btn.sm { white-space: normal; text-align: left; }
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .gallery img { border-radius: 14px; width: 100%; aspect-ratio: 4/3; object-fit: cover; cursor: zoom-in; }
 

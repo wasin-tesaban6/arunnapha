@@ -7,6 +7,7 @@ export const runtime = 'nodejs';
 // ตรวจ "ลายเซ็นไฟล์" จริง ไม่เชื่อแค่ชนิดที่ส่งมา (กันไฟล์อันตรายปลอมเป็นรูป)
 function sniff(buf) {
   if (buf.length < 12) return null;
+  if (buf.toString('ascii', 0, 5) === '%PDF-') return 'pdf';
   if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return 'png';
   if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'jpeg';
   if (buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') return 'webp';
@@ -22,6 +23,23 @@ export async function POST(req) {
   const publicFolder = ['issues', 'market'].includes(b.folder);
   if (!s && !publicFolder) return fail('กรุณาเข้าสู่ระบบ', 401);
   if (!s && !(await rateLimit(req, 'upload', 20, 600))) return fail('อัปโหลดถี่เกินไป กรุณารอสักครู่', 429);
+
+  // เอกสาร PDF (เฉพาะผู้ที่เข้าสู่ระบบ) → เก็บในโฟลเดอร์ docs
+  const pdf = /^data:application\/pdf;base64,([A-Za-z0-9+/=]+)$/.exec(String(b.dataUrl || ''));
+  if (pdf) {
+    if (!s) return fail('กรุณาเข้าสู่ระบบ', 401);
+    const doc = Buffer.from(pdf[1], 'base64');
+    if (sniff(doc) !== 'pdf') return fail('ไฟล์ PDF ไม่ถูกต้อง');
+    if (doc.length > 3 * 1024 * 1024) return fail('ไฟล์ PDF ใหญ่เกิน 3 MB — กรุณาใช้ลิงก์ Google Drive แทน');
+    if (!blobConfigured()) return fail('ยังไม่ได้เชื่อม Vercel Blob จึงอัปโหลดไฟล์ไม่ได้ — กรุณาใช้ลิงก์ Google Drive แทน');
+    try {
+      const res = await uploadToBlob(`docs/${Date.now()}.pdf`, doc, 'application/pdf');
+      return ok({ url: res.url, storage: 'blob', access: res.access });
+    } catch (e) {
+      console.error('PDF upload failed:', e?.message || e);
+      return fail('อัปโหลดไฟล์ไม่สำเร็จ กรุณาลองใหม่ หรือใช้ลิงก์ Google Drive แทน', 500);
+    }
+  }
 
   const m = /^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/.exec(String(b.dataUrl || ''));
   if (!m) return fail('รองรับเฉพาะไฟล์รูป PNG, JPG, WebP, GIF');

@@ -14,9 +14,13 @@ export async function GET(req, { params }) {
     const cache = 'public, max-age=31536000, s-maxage=31536000, immutable';
     if (r.statusCode === 304) return new Response(null, { status: 304, headers: { ETag: r.blob.etag, 'Cache-Control': cache } });
     const type = r.blob.contentType || '';
-    if (!/^image\/(png|jpeg|webp|gif)$/.test(type)) return new Response('Not found', { status: 404 });
+    const isPdf = type === 'application/pdf' && pathname.startsWith('docs/');
+    if (!/^image\/(png|jpeg|webp|gif)$/.test(type) && !isPdf) return new Response('Not found', { status: 404 });
     return new Response(r.stream, {
-      headers: { 'Content-Type': type, 'Content-Length': String(r.blob.size), ETag: r.blob.etag, 'Cache-Control': cache, 'X-Content-Type-Options': 'nosniff' },
+      headers: {
+        'Content-Type': type, 'Content-Length': String(r.blob.size), ETag: r.blob.etag, 'Cache-Control': cache, 'X-Content-Type-Options': 'nosniff',
+        ...(isPdf ? { 'Content-Disposition': 'inline', 'Content-Security-Policy': 'sandbox' } : {}),
+      },
     });
   } catch (e) {
     console.error('blob read error', e?.message || e);

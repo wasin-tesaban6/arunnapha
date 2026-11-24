@@ -10,7 +10,7 @@ export default async function ReportPage() {
   const [s, stats] = await Promise.all([getSettings(), getIssueStats()]);
   return (
     <>
-      <PageHero title="QR Code แจ้งปัญหา" sub="แจ้งปัญหาในโรงเรียน แล้วเช็คความคืบหน้าได้แบบ Real-Time ผ่านเว็บและแอปพลิเคชันไลน์" />
+      <PageHero title={s.texts.reportTitle} sub={s.texts.reportSub} />
       <section className="section">
         <div className="container stack">
           <div className="grid stats" style={{ maxWidth: 820, margin: '0 auto 10px' }}>

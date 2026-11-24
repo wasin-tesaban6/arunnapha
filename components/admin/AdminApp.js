@@ -5,7 +5,8 @@ import Icon from '../Icon';
 import { useList, Toaster, logout } from '../portal/ui';
 import Settings from './Settings';
 import Members from './Members';
-import Works from './Works';
+import Volunteer from './Volunteer';
+import Opportunities from './Opportunities';
 import Events from './Events';
 import Questions from './Questions';
 import Issues from './Issues';
@@ -18,7 +19,8 @@ const TABS = [
   ['dash', 'แดชบอร์ด', 'home'],
   ['settings', 'ตั้งค่าเว็บไซต์ & นโยบาย', 'settings'],
   ['members', 'สมาชิก & บัญชีผู้ใช้', 'users'],
-  ['works', 'ผลงาน', 'award'],
+  ['volunteer', 'จิตอาสาวิชาการ', 'heart'],
+  ['opportunities', 'ศูนย์รวมผลงาน', 'award'],
   ['events', 'ปฏิทินกิจกรรม', 'calendar'],
   ['questions', 'ถาม-ตอบ', 'chat'],
   ['issues', 'แจ้งปัญหา', 'flag'],
@@ -32,7 +34,8 @@ export default function AdminApp({ logo, lineOA, name }) {
   const [health, setHealth] = useState(null);
   useEffect(() => { if (tab === 'dash') api('/api/admin/status').then(setHealth).catch(() => {}); }, [tab]);
   const members = useList('/api/admin/members');
-  const works = useList('/api/admin/works');
+  const volunteer = useList('/api/admin/volunteer');
+  const opportunities = useList('/api/admin/opportunities');
   const events = useList('/api/admin/events');
   const questions = useList('/api/admin/questions');
   const issues = useList('/api/admin/issues');
@@ -72,7 +75,8 @@ export default function AdminApp({ logo, lineOA, name }) {
             <div className="grid kpis">
               {[
                 ['สมาชิกพรรค', members.items?.length, 'members'],
-                ['ผลงาน', works.items?.length, 'works'],
+                ['จิตอาสาวิชาการ', volunteer.items?.length, 'volunteer'],
+                ['ศูนย์รวมผลงาน', opportunities.items?.length, 'opportunities'],
                 ['กิจกรรม', events.items?.length, 'events'],
                 ['คำถามรอตอบ', counts.questions, 'questions'],
                 ['เรื่องใหม่รอรับ', counts.issues, 'issues'],
@@ -100,7 +104,8 @@ export default function AdminApp({ logo, lineOA, name }) {
         ) : null}
         {tab === 'settings' ? <Settings /> : null}
         {tab === 'members' ? <Members list={members} /> : null}
-        {tab === 'works' ? <Works list={works} members={members.items} /> : null}
+        {tab === 'volunteer' ? <Volunteer list={volunteer} members={members.items} /> : null}
+        {tab === 'opportunities' ? <Opportunities list={opportunities} /> : null}
         {tab === 'events' ? <Events list={events} /> : null}
         {tab === 'questions' ? <Questions list={questions} events={events.items} /> : null}
         {tab === 'issues' ? <Issues list={issues} /> : null}

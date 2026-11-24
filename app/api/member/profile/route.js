@@ -26,6 +26,8 @@ export async function POST(req) {
     m.classroom = str(b.classroom, 40);
     m.quote = str(b.quote, 200);
     m.bio = str(b.bio, 4000);
+    m.achievements = str(b.achievements, 4000);
+    m.experience = str(b.experience, 4000);
     m.photo = img(b.photo);
     m.contact = str(b.contact, 300);
   }

@@ -6,7 +6,7 @@ import { ISSUE_STATUS } from '@/lib/constants';
 import { notifySubscribers } from '@/lib/line';
 
 export const dynamic = 'force-dynamic';
-const ALLOWED = ['members', 'works', 'events', 'questions', 'issues', 'market'];
+const ALLOWED = ['members', 'events', 'questions', 'issues', 'market', 'volunteer', 'opportunities'];
 
 export async function GET(req, { params }) {
   if (!(await requireAdmin())) return fail('ไม่มีสิทธิ์', 401);

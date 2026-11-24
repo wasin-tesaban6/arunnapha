@@ -11,7 +11,7 @@ export default async function MembersPage() {
   const rest = members.filter((m) => !isLead(m));
   return (
     <>
-      <PageHero title={`สมาชิกพรรค${s.partyName}`} sub={`${s.councilName} ${s.schoolName} · ทั้งหมด ${members.length} คน`} />
+      <PageHero title={s.texts.membersTitle} sub={`${s.texts.membersSub} · ทั้งหมด ${members.length} คน`} />
       <section className="section">
         <div className="container">
           {members.length ? (
