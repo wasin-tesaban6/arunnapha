@@ -127,6 +127,12 @@ export default function Settings() {
       </div>
 
       <div className="card pad form">
+        <h3 style={{ margin: 0 }}>จิตอาสาวิชาการ</h3>
+        <label className="check"><input type="checkbox" checked={Boolean(f.volunteerAutoApprove)} onChange={(e) => setF((p) => ({ ...p, volunteerAutoApprove: e.target.checked }))} /> รายการที่บุคคลทั่วไปส่งเข้ามา แสดงบนเว็บทันทีโดยไม่ต้องรออนุมัติ</label>
+        <div className="xs muted">แนะนำให้ปิดไว้ (ต้องอนุมัติก่อน) เพื่อกันลิงก์หรือเนื้อหาไม่เหมาะสม</div>
+      </div>
+
+      <div className="card pad form">
         <h3 style={{ margin: 0 }}>ตลาดนัดออนไลน์</h3>
         <label className="f">เงื่อนไขการฝากขาย<textarea className="textarea" style={{ minHeight: 300 }} value={f.marketRules} onChange={set('marketRules')} /></label>
       </div>

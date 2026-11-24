@@ -45,6 +45,7 @@ export default function AdminApp({ logo, lineOA, name }) {
     questions: questions.items?.filter((q) => !q.answer && !q.hidden).length || 0,
     issues: issues.items?.filter((i) => i.status === 'received').length || 0,
     market: market.items?.filter((x) => x.status === 'pending').length || 0,
+    volunteer: volunteer.items?.filter((x) => x.status === 'pending').length || 0,
   };
 
   return (

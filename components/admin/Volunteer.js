@@ -5,16 +5,30 @@ import FileLinks from './FileLinks';
 import { Modal, SaveBar, useForm, useSubmit, Loading } from '../portal/ui';
 import { SUBJECTS, VOLUNTEER_KINDS, thDate, todayISO } from '@/lib/constants';
 
+const STATUS = {
+  pending: { label: 'รออนุมัติ', color: '#f59e0b' },
+  approved: { label: 'แสดงบนเว็บ', color: '#16a34a' },
+  rejected: { label: 'ไม่อนุมัติ', color: '#dc2626' },
+};
+
 function Editor({ item, members, onSave, onClose }) {
   const [f, set] = useForm({
     id: item?.id, title: item?.title || '', subject: item?.subject || SUBJECTS[0], kind: item?.kind || VOLUNTEER_KINDS[0], level: item?.level || '',
     tutor: item?.tutor || '', date: item?.date || todayISO(), time: item?.time || '', description: item?.description || '',
     meetLink: item?.meetLink || '', files: item?.files || [], hidden: Boolean(item?.hidden),
+    tutorClass: item?.tutorClass || '', contact: item?.contact || '', status: item?.status || 'approved', adminNote: item?.adminNote || '',
   });
   const { busy, err, onSubmit } = useSubmit(async () => { await onSave({ ...f, files: f.files.filter((x) => x.url) }); onClose(); });
   return (
     <Modal title={item?.id ? 'แก้ไขจิตอาสาวิชาการ' : 'เพิ่มจิตอาสาวิชาการ'} onClose={onClose} wide>
       <form className="form" onSubmit={onSubmit}>
+        <div className="row" style={{ gap: 6 }}>
+          {Object.entries(STATUS).map(([k, v]) => (
+            <button type="button" key={k} className="chip" onClick={() => set('status')(k)} style={f.status === k ? { background: v.color, borderColor: v.color, color: '#fff' } : null}>{v.label}</button>
+          ))}
+          {item?.source === 'public' ? <span className="badge gold">ส่งโดยบุคคลทั่วไป · รหัส {item.manageCode}</span> : null}
+        </div>
+        <label className="f">หมายเหตุถึงผู้ส่ง <span className="hint">(ผู้ส่งเห็นเมื่อตรวจสถานะด้วยรหัส)</span><input className="input" value={f.adminNote} onChange={set('adminNote')} /></label>
         <label className="f">ชื่อ / หัวข้อ *<input className="input" value={f.title} onChange={set('title')} required placeholder="เช่น เฉลยการบ้านคณิต ม.2 เรื่องเลขยกกำลัง" /></label>
         <div className="two">
           <label className="f">วิชา<input className="input" list="subj-list" value={f.subject} onChange={set('subject')} />
@@ -29,9 +43,13 @@ function Editor({ item, members, onSave, onClose }) {
           <label className="f">ผู้สอน / ผู้จัด<input className="input" list="tutor-list" value={f.tutor} onChange={set('tutor')} placeholder="ชื่อพี่สภา / ครู" />
             <datalist id="tutor-list">{(members || []).map((m) => <option key={m.id} value={m.name} />)}</datalist></label>
           <div className="two">
-            <label className="f">วันที่<input className="input" type="date" value={f.date} onChange={set('date')} /></label>
-            <label className="f">เวลา<input className="input" value={f.time} onChange={set('time')} placeholder="19.00–20.00 น." /></label>
+            <label className="f">ชั้นผู้สอน<input className="input" value={f.tutorClass} onChange={set('tutorClass')} /></label>
+            <label className="f">ช่องทางติดต่อ<input className="input" value={f.contact} onChange={set('contact')} /></label>
           </div>
+        </div>
+        <div className="two">
+          <label className="f">วันที่<input className="input" type="date" value={f.date} onChange={set('date')} /></label>
+          <label className="f">เวลา<input className="input" value={f.time} onChange={set('time')} placeholder="19.00–20.00 น." /></label>
         </div>
         <label className="f">ลิงก์ Google Meet / ห้องเรียนออนไลน์<input className="input" type="url" value={f.meetLink} onChange={set('meetLink')} placeholder="https://meet.google.com/..." /></label>
         <label className="f">รายละเอียด<textarea className="textarea" value={f.description} onChange={set('description')} placeholder="เนื้อหาที่สอน สิ่งที่ต้องเตรียม ฯลฯ" /></label>
@@ -46,17 +64,24 @@ function Editor({ item, members, onSave, onClose }) {
 export default function Volunteer({ list, members }) {
   const { items, save, remove } = list;
   const [edit, setEdit] = useState(null);
+  const [filter, setFilter] = useState('all');
   if (!items) return <Loading />;
-  const sorted = [...items].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+  const st = (v) => v.status || 'approved';
+  const sorted = [...items].filter((v) => filter === 'all' || st(v) === filter)
+    .sort((a, b) => (st(b) === 'pending') - (st(a) === 'pending') || String(b.date || '').localeCompare(String(a.date || '')));
   return (
     <>
       <div className="top">
         <div><h2 style={{ margin: 0 }}>จิตอาสาวิชาการ</h2><div className="muted small">เฉลยการบ้าน ติวแต่ละวิชา — ใส่ชื่อ ลิงก์ Meet หรือไฟล์เอกสาร</div></div>
         <button className="btn" onClick={() => setEdit({})}><Icon name="plus" size={20} /> เพิ่มรายการ</button>
       </div>
+      <div className="filters">
+        <button className={`chip ${filter === 'all' ? 'on' : ''}`} onClick={() => setFilter('all')}>ทั้งหมด ({items.length})</button>
+        {Object.entries(STATUS).map(([k, v]) => <button key={k} className={`chip ${filter === k ? 'on' : ''}`} onClick={() => setFilter(k)}>{v.label} ({items.filter((x) => st(x) === k).length})</button>)}
+      </div>
       <div className="table-wrap">
         <table className="t">
-          <thead><tr><th>วันที่</th><th>ชื่อ</th><th>วิชา / ประเภท</th><th>Meet / ไฟล์</th><th style={{ textAlign: 'right' }}>จัดการ</th></tr></thead>
+          <thead><tr><th>วันที่</th><th>ชื่อ</th><th>วิชา / ประเภท</th><th>Meet / ไฟล์</th><th>สถานะ</th><th style={{ textAlign: 'right' }}>จัดการ</th></tr></thead>
           <tbody>
             {sorted.map((v) => (
               <tr key={v.id}>
@@ -64,13 +89,15 @@ export default function Volunteer({ list, members }) {
                 <td><b>{v.title}</b>{v.hidden ? <span className="badge" style={{ marginLeft: 6 }}>ซ่อน</span> : null}<div className="xs muted">{v.tutor}</div></td>
                 <td>{v.subject}<div className="xs muted">{v.kind}{v.level ? ` · ${v.level}` : ''}</div></td>
                 <td className="xs">{v.meetLink ? '🎥 มีลิงก์' : '—'} · 📄 {v.files?.length || 0}</td>
+                <td><span className="badge" style={{ background: STATUS[st(v)].color, color: '#fff' }}>{STATUS[st(v)].label}</span>{v.source === 'public' ? <div className="xs muted">ส่งโดยบุคคลทั่วไป</div> : null}</td>
                 <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                  {st(v) === 'pending' ? <><button className="btn sm" onClick={() => save({ ...v, status: 'approved' })}>อนุมัติ</button>{' '}</> : null}
                   <button className="btn sm ghost" onClick={() => setEdit(v)}><Icon name="edit" size={16} /> แก้ไข</button>{' '}
                   <button className="btn sm danger" onClick={() => remove(v.id, v.title)}><Icon name="trash" size={16} /></button>
                 </td>
               </tr>
             ))}
-            {!sorted.length ? <tr><td colSpan={5} className="center muted">ยังไม่มีรายการ</td></tr> : null}
+            {!sorted.length ? <tr><td colSpan={6} className="center muted">ยังไม่มีรายการ</td></tr> : null}
           </tbody>
         </table>
       </div>

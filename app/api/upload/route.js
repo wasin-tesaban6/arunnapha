@@ -20,14 +20,15 @@ function sniff(buf) {
 export async function POST(req) {
   const b = await body(req);
   const s = await getSession();
-  const publicFolder = ['issues', 'market'].includes(b.folder);
+  const publicFolder = ['issues', 'market', 'docs'].includes(b.folder);
   if (!s && !publicFolder) return fail('กรุณาเข้าสู่ระบบ', 401);
   if (!s && !(await rateLimit(req, 'upload', 20, 600))) return fail('อัปโหลดถี่เกินไป กรุณารอสักครู่', 429);
 
-  // เอกสาร PDF (เฉพาะผู้ที่เข้าสู่ระบบ) → เก็บในโฟลเดอร์ docs
+  // เอกสาร PDF → เก็บในโฟลเดอร์ docs
   const pdf = /^data:application\/pdf;base64,([A-Za-z0-9+/=]+)$/.exec(String(b.dataUrl || ''));
   if (pdf) {
-    if (!s) return fail('กรุณาเข้าสู่ระบบ', 401);
+    // บุคคลทั่วไปอัปโหลด PDF ได้ (สำหรับส่งจิตอาสาวิชาการ) แต่จำกัดจำนวนครั้ง
+    if (!s && b.folder !== 'docs') return fail('กรุณาเข้าสู่ระบบ', 401);
     const doc = Buffer.from(pdf[1], 'base64');
     if (sniff(doc) !== 'pdf') return fail('ไฟล์ PDF ไม่ถูกต้อง');
     if (doc.length > 3 * 1024 * 1024) return fail('ไฟล์ PDF ใหญ่เกิน 3 MB — กรุณาใช้ลิงก์ Google Drive แทน');
@@ -41,6 +42,7 @@ export async function POST(req) {
     }
   }
 
+  if (!s && b.folder === 'docs') return fail('โฟลเดอร์นี้รับเฉพาะไฟล์ PDF');
   const m = /^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/.exec(String(b.dataUrl || ''));
   if (!m) return fail('รองรับเฉพาะไฟล์รูป PNG, JPG, WebP, GIF');
   const buf = Buffer.from(m[2], 'base64');

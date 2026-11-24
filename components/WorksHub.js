@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Icon from './Icon';
 import { Empty } from './Cards';
+import { VolunteerSubmit, VolunteerManage } from './VolunteerSubmit';
 import { thDate, linkKind, todayISO } from '@/lib/constants';
 
 export function VolunteerCard({ v, today }) {
@@ -15,7 +16,8 @@ export function VolunteerCard({ v, today }) {
         {past ? <span className="badge" style={{ background: '#f1f5f9', color: '#64748b' }}>ผ่านไปแล้ว</span> : null}
       </div>
       <h3>{v.title}</h3>
-      {v.tutor ? <div className="small muted">👤 โดย {v.tutor}</div> : null}
+      {v.tutor ? <div className="small muted">👤 โดย {v.tutor}{v.tutorClass ? ` (${v.tutorClass})` : ''}</div> : null}
+      {v.contact ? <div className="small muted">💬 ติดต่อ: {v.contact}</div> : null}
       {v.date || v.time ? <div className="small">📅 {v.date ? thDate(v.date, true) : ''}{v.time ? ` · 🕘 ${v.time}` : ''}</div> : null}
       {v.description ? <p className="small pre" style={{ margin: '6px 0 0' }}>{v.description}</p> : null}
       <div className="row" style={{ marginTop: 'auto', paddingTop: 12, gap: 8 }}>
@@ -62,6 +64,7 @@ export default function WorksHub({ volunteer, opportunities, t }) {
   const [kind, setKind] = useState('');
   const [scope, setScope] = useState('');
   const [showClosed, setShowClosed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const today = todayISO();
 
   useEffect(() => { if (new URLSearchParams(window.location.search).get('tab') === 'opp') setTab('opp'); }, []);
@@ -84,7 +87,10 @@ export default function WorksHub({ volunteer, opportunities, t }) {
         <button className={tab === 'volunteer' ? 'on' : ''} onClick={() => switchTab('volunteer')}><Icon name="heart" size={20} /> {t.volunteerTab} <span className="n">{volunteer.length}</span></button>
         <button className={tab === 'opp' ? 'on' : ''} onClick={() => switchTab('opp')}><Icon name="award" size={20} /> {t.oppTab} {openCount ? <span className="n live-n">{openCount} เปิดรับ</span> : null}</button>
       </div>
-      <p className="muted" style={{ marginTop: 0 }}>{tab === 'opp' ? t.oppIntro : t.volunteerIntro}</p>
+      <div className="row between" style={{ marginBottom: 12 }}>
+        <p className="muted" style={{ margin: 0, flex: 1, minWidth: 240 }}>{tab === 'opp' ? t.oppIntro : t.volunteerIntro}</p>
+        {tab === 'volunteer' ? <button className="btn" onClick={() => setSubmitting(true)}><Icon name="plus" size={20} /> {t.volunteerBtn}</button> : null}
+      </div>
 
       <div className="row" style={{ marginBottom: 14 }}>
         <select className="select" style={{ maxWidth: 300 }} value={subject} onChange={(e) => setSubject(e.target.value)}>
@@ -114,9 +120,11 @@ export default function WorksHub({ volunteer, opportunities, t }) {
         </div>
       ) : (
         <Empty icon={tab === 'opp' ? 'award' : 'heart'} title={src.length ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มีรายการ'}>
-          {src.length ? (tab === 'opp' && !showClosed ? 'ลองติ๊ก “แสดงที่ปิดรับสมัครแล้ว” หรือเปลี่ยนตัวกรอง' : 'ลองเปลี่ยนตัวกรอง') : 'สภานักเรียนจะเพิ่มข้อมูลเร็ว ๆ นี้'}
+          {src.length ? (tab === 'opp' && !showClosed ? 'ลองติ๊ก “แสดงที่ปิดรับสมัครแล้ว” หรือเปลี่ยนตัวกรอง' : 'ลองเปลี่ยนตัวกรอง') : tab === 'volunteer' ? 'เป็นคนแรกที่มาสอนหรือแชร์เฉลยได้เลย — กดปุ่มด้านบน' : 'สภานักเรียนจะเพิ่มข้อมูลเร็ว ๆ นี้'}
         </Empty>
       )}
+      {tab === 'volunteer' ? <VolunteerManage /> : null}
+      {submitting ? <VolunteerSubmit label={t.volunteerBtn} onClose={() => setSubmitting(false)} /> : null}
     </>
   );
 }

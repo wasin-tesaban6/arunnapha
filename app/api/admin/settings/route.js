@@ -38,6 +38,7 @@ export async function POST(req) {
     contact: Object.fromEntries(['facebook', 'instagram', 'line', 'email', 'tiktok'].map((k) => [k, str(b.contact?.[k], 300)])),
     marketRules: str(b.marketRules, 8000),
     marketPickup: str(b.marketPickup, 300),
+    volunteerAutoApprove: b.volunteerAutoApprove === undefined ? Boolean(cur.volunteerAutoApprove) : Boolean(b.volunteerAutoApprove),
     issueCategories: Array.isArray(b.issueCategories) ? b.issueCategories.map((x) => str(x, 60)).filter(Boolean).slice(0, 30) : cur.issueCategories,
   };
   await db.setDoc('settings', s);

@@ -24,9 +24,9 @@ export default function FileLinks({ value, onChange, max = 12 }) {
   return (
     <div className="stack">
       {list.map((f, i) => (
-        <div key={i} className="row" style={{ flexWrap: 'nowrap', gap: 8 }}>
-          <input className="input" style={{ maxWidth: 240 }} value={f.name} onChange={(e) => set(i, 'name', e.target.value)} placeholder="ชื่อเอกสาร เช่น เฉลยแบบฝึกหัด บทที่ 1" />
-          <input className="input" value={f.url} onChange={(e) => set(i, 'url', e.target.value)} placeholder="https://drive.google.com/..." readOnly={f.url.startsWith('/api/blob/')} />
+        <div key={i} className="row" style={{ gap: 8, alignItems: 'center' }}>
+          <input className="input" style={{ flex: '1 1 150px', width: 'auto' }} value={f.name} onChange={(e) => set(i, 'name', e.target.value)} placeholder="ชื่อเอกสาร เช่น เฉลยแบบฝึกหัด บทที่ 1" />
+          <input className="input" style={{ flex: '3 1 220px', width: 'auto' }} value={f.url} onChange={(e) => set(i, 'url', e.target.value)} placeholder="https://drive.google.com/..." readOnly={f.url.startsWith('/api/blob/')} />
           <button type="button" className="icon-btn" onClick={() => onChange(list.filter((_, j) => j !== i))} title="ลบ"><Icon name="trash" size={18} /></button>
         </div>
       ))}
