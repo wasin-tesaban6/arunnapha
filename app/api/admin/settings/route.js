@@ -28,6 +28,7 @@ export async function POST(req) {
     logoUrl: img(b.logoUrl) || '/logo.svg',
     heroImage: img(b.heroImage, 900),
     heroSlides: Array.isArray(b.heroSlides) ? imgs(b.heroSlides, 8) : cur.heroSlides,
+    posters: Array.isArray(b.posters) ? imgs(b.posters, 12) : cur.posters || [],
     texts: b.texts && typeof b.texts === 'object'
       ? Object.fromEntries(TEXT_FIELDS.map(([k, , , , long]) => [k, str(b.texts[k], long ? 1000 : 200)]))
       : cur.texts,

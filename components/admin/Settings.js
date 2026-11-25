@@ -87,6 +87,12 @@ export default function Settings() {
       </div>
 
       <div className="card pad form">
+        <h3 style={{ margin: 0 }}>สไลด์โปสเตอร์ 4:5 <span className="muted small" style={{ fontWeight: 400 }}>(แบบ Instagram · สูงสุด 12 รูป)</span></h3>
+        <div className="xs muted">แสดงก่อนส่วนนโยบายในหน้าแรก · แนะนำขนาด 1080 × 1350 px (รูปที่ไม่ใช่ 4:5 จะถูกครอปตรงกลาง) · ใช้ ‹ › จัดลำดับ · ไม่มีรูป = ไม่แสดงส่วนนี้</div>
+        <ImageUpload multiple reorder max={12} value={f.posters || []} onChange={(v) => setF((p) => ({ ...p, posters: v }))} folder="hero" size={1350} label="เพิ่มโปสเตอร์" />
+      </div>
+
+      <div className="card pad form">
         <h3 style={{ margin: 0 }}>สไลด์โชว์หน้าแรก <span className="muted small" style={{ fontWeight: 400 }}>(สูงสุด 8 รูป)</span></h3>
         <div className="xs muted">รูปจะเลื่อนเปลี่ยนอัตโนมัติเป็นพื้นหลังส่วนบนของหน้าแรก · ใช้ปุ่ม ‹ › จัดลำดับ · ลบรูปทั้งหมด = ใช้พื้นหลังสีน้ำเงินแบบเดิม · แนะนำรูปแนวนอน</div>
         <ImageUpload multiple reorder wide max={8} value={f.heroSlides || []} onChange={(v) => setF((p) => ({ ...p, heroSlides: v }))} folder="hero" size={1920} label="เพิ่มรูปสไลด์" />

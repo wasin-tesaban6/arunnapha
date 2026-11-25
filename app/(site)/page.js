@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Icon from '@/components/Icon';
 import HeroSlider from '@/components/HeroSlider';
+import PosterSlider from '@/components/PosterSlider';
 import { MemberCard, EventItem, ProductCard, Empty } from '@/components/Cards';
 import { OppCard, VolunteerCard } from '@/components/WorksHub';
 import { getSettings, getMembers, getEvents, getMarket, getReportStats, getOpportunities, getVolunteer } from '@/lib/data';
@@ -21,6 +22,7 @@ export default async function Home() {
   const nextVolunteer = volunteer.filter((v) => !v.date || v.date >= today).slice(0, 6);
   const policies = (s.policies || []).filter((p) => p.title || p.detail);
   const slides = (s.heroSlides || []).filter(Boolean).slice(0, 8);
+  const posters = (s.posters || []).filter(Boolean).slice(0, 12);
 
   return (
     <>
@@ -38,6 +40,17 @@ export default async function Home() {
           <div className="hero-logo"><img src={s.logoUrl || '/logo.svg'} alt={`โลโก้พรรค${s.partyName}`} fetchPriority="high" /></div>
         </div>
       </section>
+
+      {posters.length ? (
+        <section className="section" style={{ paddingTop: 30, paddingBottom: 10 }}>
+          <div className="container">
+            <div className="section-head">
+              <div><div className="kicker">{t.postersKicker}</div><h2>{t.postersTitle}</h2></div>
+            </div>
+            <PosterSlider posters={posters} />
+          </div>
+        </section>
+      ) : null}
 
       <section className="section" style={{ paddingTop: 30 }}>
         <div className="container">
