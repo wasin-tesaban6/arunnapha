@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
 import { getSettings } from '@/lib/data';
 
 export default async function SiteLayout({ children }) {
@@ -9,6 +10,7 @@ export default async function SiteLayout({ children }) {
       <Header s={s} />
       <main>{children}</main>
       <Footer s={s} />
+      <BackToTop />
     </div>
   );
 }
