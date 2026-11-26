@@ -33,7 +33,7 @@ export default function Footer({ s }) {
             </ul>
           </div>
           <div>
-            <h4>ติดต่อพรรคนักเรียน</h4>
+            <h4>ติดต่อพรรคอรุณนภา</h4>
             <ul>
               {socials.map(([k, v]) => (
                 <li key={k}>{k}: {href(v) ? <a href={v} target="_blank" rel="noopener">{v.replace(/^https?:\/\/(www\.)?/, '').slice(0, 40)}</a> : v}</li>
