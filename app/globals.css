@@ -458,7 +458,7 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
    หน้า /admin และ /scmember ไม่ได้รับผลกระทบ
    =================================================================== */
 .lg {
-  --glass-bg: linear-gradient(135deg, rgba(255,255,255,.74), rgba(255,255,255,.52));
+  --glass-bg: linear-gradient(135deg, rgba(255,255,255,.8), rgba(255,255,255,.6));
   --glass-border: rgba(255,255,255,.78);
   --glass-blur: blur(18px) saturate(180%);
   --glass-shine: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.35), inset 0 0 22px rgba(255,255,255,.28);
@@ -467,7 +467,7 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
 }
 /* พื้นหลังแสงฟ้า-ทองนุ่ม ๆ ให้กระจกมีอะไรสะท้อน */
 .lg::before {
-  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; transform: translateZ(0);
   background:
     radial-gradient(42vmax 42vmax at 92% 22%, rgba(147,196,250,.55), transparent 70%),
     radial-gradient(46vmax 46vmax at 2% 78%, rgba(85,163,243,.30), transparent 70%),
@@ -480,20 +480,19 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
 /* การ์ดกระจก */
 .lg .card {
   background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shine), var(--glass-shadow);
 }
 .lg .card.hover:hover { border-color: #fff; box-shadow: var(--glass-shine), 0 16px 40px rgba(11,52,119,.16); }
 .lg .feature .ic { background: linear-gradient(135deg, rgba(255,255,255,.85), rgba(227,240,255,.55)); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(196,222,253,.9), 0 4px 12px rgba(31,134,232,.12); }
 .lg .feature .num { color: rgba(147,196,250,.35); }
-.lg .member .pos { background: rgba(255,255,255,.62); -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%); border: 1px solid rgba(255,255,255,.8); box-shadow: inset 0 1px 0 #fff, 0 4px 14px rgba(11,52,119,.14); }
+.lg .member .pos { background: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.8); box-shadow: inset 0 1px 0 #fff, 0 4px 14px rgba(11,52,119,.14); }
 .lg .member.lead .pos { background: rgba(247,181,56,.82); border-color: rgba(255,236,190,.9); }
 
 /* หัวเว็บ: แถบกระจกลอย */
 .lg .header { background: transparent; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; padding: 10px 12px 0; margin-bottom: -76px; pointer-events: none; }
 .lg .header .container { pointer-events: auto; position: relative; isolation: isolate; height: 66px; max-width: calc(var(--container) - 16px); padding: 0 10px 0 14px; border-radius: 999px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shine), 0 10px 30px rgba(7,31,76,.16); }
-.lg .header .container::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,255,255,.5)); -webkit-backdrop-filter: blur(20px) saturate(190%); backdrop-filter: blur(20px) saturate(190%); }
+.lg .header .container::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(255,255,255,.58)); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .lg .brand img { width: 46px; height: 46px; }
 .lg .nav a:hover { background: rgba(255,255,255,.6); box-shadow: inset 0 1px 0 #fff; }
 .lg .nav a.active { background: linear-gradient(180deg, #3c9cf0, var(--sky-500)); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 6px rgba(11,52,119,.18), 0 4px 12px rgba(31,134,232,.3); }
@@ -515,7 +514,7 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
 @media (prefers-reduced-motion: reduce) { .lg .nav-pill { transition: opacity .2s; } .lg .nav-pill.moving-x, .lg .nav-pill.moving-y, .lg .nav-pill.press { scale: 1; } }
 @media (max-width: 960px) { .lg .nav-pill { border-radius: 14px; } }
 @media (max-width: 960px) {
-  .lg .nav { top: calc(100% + 8px); left: 0; right: 0; border-radius: 22px; background: rgba(255,255,255,.8); -webkit-backdrop-filter: blur(22px) saturate(190%); backdrop-filter: blur(22px) saturate(190%); border: 1px solid var(--glass-border); box-shadow: var(--glass-shine), 0 16px 40px rgba(7,31,76,.18); }
+  .lg .nav { top: calc(100% + 8px); left: 0; right: 0; border-radius: 22px; background: linear-gradient(180deg, #ffffff, #f2f8ff); border: 1px solid var(--glass-border); box-shadow: var(--glass-shine), 0 16px 40px rgba(7,31,76,.18); }
 }
 @media (max-width: 600px) {
   .lg .header { padding: 8px 8px 0; }
@@ -537,26 +536,26 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
 /* ปุ่ม */
 .lg .btn { box-shadow: inset 0 1px 0 rgba(255,255,255,.45), inset 0 -2px 6px rgba(11,52,119,.16); }
 .lg .btn:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -2px 6px rgba(11,52,119,.16), 0 8px 20px rgba(31,134,232,.28); }
-.lg .btn.ghost { background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1.5px rgba(147,196,250,.75), 0 4px 14px rgba(11,52,119,.08); }
+.lg .btn.ghost { background: rgba(255,255,255,.7); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1.5px rgba(147,196,250,.75), 0 4px 14px rgba(11,52,119,.08); }
 .lg .btn.ghost:hover { background: rgba(255,255,255,.8); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1.5px var(--sky-400), 0 8px 20px rgba(11,52,119,.12); }
 .lg .btn.gold { box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -3px 8px rgba(150,85,0,.2), 0 8px 22px rgba(247,181,56,.32); }
 .lg .btn.danger { box-shadow: inset 0 0 0 2px #fecaca; }
-.lg .hero .btn.white, .lg .cta .btn.white { background: rgba(255,255,255,.2); color: #fff; -webkit-backdrop-filter: blur(14px) saturate(180%); backdrop-filter: blur(14px) saturate(180%); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.45), inset 0 -2px 8px rgba(255,255,255,.12), 0 8px 24px rgba(7,31,76,.25); }
+.lg .hero .btn.white, .lg .cta .btn.white { background: rgba(255,255,255,.2); color: #fff; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.45), inset 0 -2px 8px rgba(255,255,255,.12), 0 8px 24px rgba(7,31,76,.25); }
 .lg .hero .btn.white:hover, .lg .cta .btn.white:hover { background: rgba(255,255,255,.32); color: #fff; }
 
 /* สไลด์หน้าแรก & โปสเตอร์ */
-.lg .hero-nav { background: rgba(255,255,255,.18); -webkit-backdrop-filter: blur(14px) saturate(180%); backdrop-filter: blur(14px) saturate(180%); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(7,31,76,.25); }
-.lg .hero-dots { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.16); -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.3); }
+.lg .hero-nav { background: rgba(255,255,255,.18); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.4), 0 6px 18px rgba(7,31,76,.25); }
+.lg .hero-dots { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.16); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.3); }
 .lg .poster { box-shadow: 0 0 0 1px rgba(255,255,255,.8), var(--glass-shadow); }
-.lg .poster-nav { background: rgba(255,255,255,.6); -webkit-backdrop-filter: blur(14px) saturate(180%); backdrop-filter: blur(14px) saturate(180%); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(255,255,255,.8), 0 8px 22px rgba(11,52,119,.18); }
+.lg .poster-nav { background: rgba(255,255,255,.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(255,255,255,.8), 0 8px 22px rgba(11,52,119,.18); }
 .lg .poster-nav:hover { background: rgba(255,255,255,.85); }
 
 /* ชิป ช่องกรอก กล่องว่าง ฯลฯ */
-.lg .chip { background: rgba(255,255,255,.55); border-color: rgba(255,255,255,.85); -webkit-backdrop-filter: blur(10px) saturate(170%); backdrop-filter: blur(10px) saturate(170%); box-shadow: inset 0 1px 0 #fff, 0 2px 8px rgba(11,52,119,.06); }
+.lg .chip { background: rgba(255,255,255,.72); border-color: rgba(255,255,255,.85); box-shadow: inset 0 1px 0 #fff, 0 2px 8px rgba(11,52,119,.06); }
 .lg .chip.on { background: var(--navy-800); border-color: var(--navy-800); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 4px 12px rgba(11,52,119,.25); }
 .lg .input, .lg .select, .lg .textarea { background: rgba(255,255,255,.72); border-color: rgba(196,222,253,.9); }
 .lg .input:focus, .lg .select:focus, .lg .textarea:focus { background: rgba(255,255,255,.92); }
-.lg .empty { background: rgba(255,255,255,.4); border-color: rgba(147,196,250,.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.lg .empty { background: rgba(255,255,255,.55); border-color: rgba(147,196,250,.6); }
 .lg .event-item:hover { background: rgba(255,255,255,.6); }
 .lg .date-box { background: rgba(227,240,255,.75); box-shadow: inset 0 1px 0 #fff, inset 0 0 0 1px rgba(196,222,253,.8); }
 .lg .tabs { border-bottom-color: rgba(196,222,253,.8); }
@@ -564,9 +563,9 @@ table.t td .thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: 
 .lg .cta { box-shadow: inset 0 1px 0 rgba(255,255,255,.35), inset 0 0 0 1px rgba(255,255,255,.15), 0 18px 44px rgba(11,52,119,.22); }
 
 /* หน้าต่างป๊อปอัป */
-.lg .modal-bg { background: rgba(7,31,76,.35); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.lg .modal { background: rgba(255,255,255,.9); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); border: 1px solid var(--glass-border); box-shadow: var(--glass-shine), var(--shadow-lg); }
-.lg .modal .mh { background: rgba(255,255,255,.75); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-bottom-color: rgba(196,222,253,.7); }
+.lg .modal-bg { background: rgba(7,31,76,.35); }
+.lg .modal { background: rgba(255,255,255,.97); border: 1px solid var(--glass-border); box-shadow: var(--glass-shine), var(--shadow-lg); }
+.lg .modal .mh { background: rgba(255,255,255,.96); border-bottom-color: rgba(196,222,253,.7); }
 
 /* เบราว์เซอร์ที่ไม่รองรับกระจก หรือผู้ใช้ตั้งค่าลดความโปร่งใส → การ์ดขาวทึบแบบเดิม */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
