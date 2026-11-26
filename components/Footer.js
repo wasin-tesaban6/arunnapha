@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import VisitCounter from './VisitCounter';
 
 export default function Footer({ s }) {
   const c = s.contact || {};
@@ -19,6 +20,7 @@ export default function Footer({ s }) {
               </div>
             </div>
             <p className="small pre" style={{ maxWidth: 420 }}>{s.schoolMotto ? `“${s.schoolMotto}” — ` : ''}{s.texts.footerText}</p>
+            <VisitCounter />
           </div>
           <div>
             <h4>เมนู</h4>
