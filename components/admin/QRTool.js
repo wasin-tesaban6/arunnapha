@@ -5,7 +5,7 @@ import Icon from '../Icon';
 
 const DEFAULT = ['ห้องสภานักเรียน', 'โรงอาหาร', 'ห้องน้ำอาคาร 1', 'ห้องน้ำอาคาร 2', 'อาคาร 1', 'อาคาร 2', 'สนามกีฬา', 'ห้องสมุด'];
 
-export default function QRTool({ lineOA }) {
+export default function QRTool() {
   const [text, setText] = useState(() => { try { return localStorage.getItem('sc6_qr_locs') || DEFAULT.join('\n'); } catch { return DEFAULT.join('\n'); } });
   const [cards, setCards] = useState([]);
   const [origin, setOrigin] = useState('');
@@ -15,11 +15,10 @@ export default function QRTool({ lineOA }) {
     if (!origin) return;
     const locs = text.split('\n').map((s) => s.trim()).filter(Boolean).slice(0, 60);
     const items = [{ title: 'แจ้งปัญหา (ทั่วไป)', url: `${origin}/report` }, ...locs.map((l) => ({ title: l, url: `${origin}/report?loc=${encodeURIComponent(l)}` }))];
-    if (lineOA) items.push({ title: 'เพิ่มเพื่อน LINE สภา', url: `https://line.me/R/ti/p/${encodeURIComponent(lineOA)}` });
     let off = false;
     Promise.all(items.map(async (x) => ({ ...x, img: await QRCode.toDataURL(x.url, { width: 360, margin: 1, color: { dark: '#0b3477' } }) }))).then((r) => !off && setCards(r));
     return () => { off = true; };
-  }, [text, origin, lineOA]);
+  }, [text, origin]);
 
   return (
     <>

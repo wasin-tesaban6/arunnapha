@@ -25,12 +25,12 @@ export default async function ReportPage() {
             <h2 style={{ margin: 0, fontSize: 34 }}>{t.reportScanTitle}</h2>
             <p className="muted pre" style={{ margin: 0 }}>{t.reportScanText}</p>
             {s.reportLineQr ? (
-              <img src={s.reportLineQr} alt="QR Code LINE สภานักเรียน สำหรับแจ้งปัญหา" className="line-qr" />
+              <img src={s.reportLineQr} alt="QR Code Traffy Fondue สำหรับแจ้งปัญหา" className="line-qr" />
             ) : (
-              <div className="empty" style={{ maxWidth: 360, margin: '0 auto' }}>สภานักเรียนกำลังเตรียม QR Code LINE</div>
+              <div className="empty" style={{ maxWidth: 360, margin: '0 auto' }}>กำลังเตรียม QR Code Traffy Fondue</div>
             )}
             {s.reportLineUrl ? (
-              <div><a href={s.reportLineUrl} className="btn line-btn" target="_blank" rel="noopener"><Icon name="line" size={22} /> เปิด LINE / เพิ่มเพื่อน</a></div>
+              <div><a href={s.reportLineUrl} className="btn traffy-btn" target="_blank" rel="noopener"><Icon name="qr" size={22} /> แจ้งปัญหาผ่าน Traffy Fondue</a></div>
             ) : null}
             {s.reportLineUrl ? <div className="xs muted">เปิดเว็บนี้บนมือถืออยู่? กดปุ่มด้านบนได้เลย ไม่ต้องสแกน</div> : null}
           </div>

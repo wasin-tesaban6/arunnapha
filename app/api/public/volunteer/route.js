@@ -3,7 +3,6 @@ import { clean } from '@/lib/schema';
 import { makeCode } from '@/lib/codes';
 import { getSettings } from '@/lib/data';
 import { ok, fail, body, refresh, str, rateLimit } from '@/lib/api';
-import { notifyAdmins } from '@/lib/line';
 
 // พี่ ๆ น้อง ๆ เพื่อน ๆ ส่งรายการจิตอาสาวิชาการ (สอน / เฉลยการบ้าน) เข้ามาเอง
 export async function POST(req) {
@@ -23,7 +22,6 @@ export async function POST(req) {
   item.manageCode = code;
   item.source = 'public';
   await db.put('volunteer', item);
-  await notifyAdmins(`📚 มีจิตอาสาวิชาการส่งเข้ามาใหม่${item.status === 'pending' ? ' (รออนุมัติ)' : ''}\n${item.title}\nโดย: ${item.tutor}${item.tutorClass ? ` (${item.tutorClass})` : ''}`);
   refresh();
   return ok({ ok: true, code, status: item.status });
 }

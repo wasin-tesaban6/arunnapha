@@ -10,5 +10,5 @@ export default async function AdminPage() {
   const [s, settings] = await Promise.all([getSession(), getSettings()]);
   const logo = settings.logoUrl || '/logo.svg';
   if (s?.role !== 'admin') return <LoginForm role="admin" title="ผู้ดูแลระบบ" sub="CRMS6 | อรุณนภา — จัดการเว็บไซต์ทั้งหมด" logo={logo} />;
-  return <AdminApp logo={logo} lineOA={process.env.NEXT_PUBLIC_LINE_OA_ID || ''} name={s.name} />;
+  return <AdminApp logo={logo} name={s.name} />;
 }

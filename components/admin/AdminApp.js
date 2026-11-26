@@ -29,7 +29,7 @@ const TABS = [
   ['system', 'ระบบ & รหัสผ่าน', 'lock'],
 ];
 
-export default function AdminApp({ logo, lineOA, name }) {
+export default function AdminApp({ logo, name }) {
   const [tab, setTab] = useState('dash');
   const [health, setHealth] = useState(null);
   useEffect(() => { if (tab === 'dash') api('/api/admin/status').then(setHealth).catch(() => {}); }, [tab]);
@@ -111,7 +111,7 @@ export default function AdminApp({ logo, lineOA, name }) {
         {tab === 'questions' ? <Questions list={questions} events={events.items} /> : null}
         {tab === 'issues' ? <Issues list={issues} /> : null}
         {tab === 'market' ? <Market list={market} /> : null}
-        {tab === 'qr' ? <QRTool lineOA={lineOA} /> : null}
+        {tab === 'qr' ? <QRTool /> : null}
         {tab === 'system' ? <System /> : null}
       </main>
       <Toaster />

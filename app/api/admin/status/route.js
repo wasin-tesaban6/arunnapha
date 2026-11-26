@@ -1,7 +1,6 @@
 import { requireAdmin, usingDefaultAdminPassword } from '@/lib/auth';
 import { storageKind, pingDb } from '@/lib/db';
 import { blobConfigured, pingBlob } from '@/lib/blob';
-import { lineEnabled } from '@/lib/line';
 import { ok, fail } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
@@ -20,9 +19,6 @@ export async function GET(req) {
     ok: true,
     storage: storageKind, dbOk, dbMs, dbErr,
     blob: blobConfigured(), blobOk, blobErr, blobTested: deep, blobAccess,
-    line: lineEnabled,
-    lineOA: process.env.NEXT_PUBLIC_LINE_OA_ID || '',
-    lineAdminKey: Boolean(process.env.LINE_ADMIN_KEY),
     authSecret: Boolean(process.env.AUTH_SECRET),
     defaultPassword: await usingDefaultAdminPassword().catch(() => false),
   });

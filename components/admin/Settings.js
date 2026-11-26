@@ -129,13 +129,13 @@ export default function Settings() {
       <div className="card pad form">
         <h3 style={{ margin: 0 }}>แจ้งปัญหา</h3>
         <div className="two">
-          <div className="f" style={{ fontWeight: 700, color: 'var(--navy-800)' }}>ภาพ QR Code LINE สำหรับแจ้งปัญหา
-            <span className="hint" style={{ display: 'block' }}>แสดงในหน้า “แจ้งปัญหา” ให้สแกนเพิ่มเพื่อน LINE</span>
+          <div className="f" style={{ fontWeight: 700, color: 'var(--navy-800)' }}>ภาพ QR Code Traffy Fondue สำหรับแจ้งปัญหา
+            <span className="hint" style={{ display: 'block' }}>แสดงในหน้า “แจ้งปัญหา” ให้สแกนไปแจ้งปัญหาใน Traffy Fondue</span>
             <ImageUpload value={f.reportLineQr || ''} onChange={(v) => setF((p) => ({ ...p, reportLineQr: v }))} folder="brand" size={900} label="อัปโหลด QR" />
           </div>
-          <label className="f">ลิงก์ LINE (ปุ่ม “เปิด LINE / เพิ่มเพื่อน”)
-            <span className="hint">เช่น https://lin.ee/xxxx — สำหรับคนที่เปิดเว็บบนมือถือ</span>
-            <input className="input" type="url" value={f.reportLineUrl || ''} onChange={set('reportLineUrl')} placeholder="https://lin.ee/..." />
+          <label className="f">ลิงก์ Traffy Fondue (ปุ่ม “แจ้งปัญหาผ่าน Traffy Fondue”)
+            <span className="hint">ลิงก์ของพรรคใน Traffy Fondue (ขึ้นต้นด้วย https://) — สำหรับคนที่เปิดเว็บบนมือถือ</span>
+            <input className="input" type="url" value={f.reportLineUrl || ''} onChange={set('reportLineUrl')} placeholder="https://..." />
           </label>
         </div>
         <div className="f" style={{ fontWeight: 700, color: 'var(--navy-800)' }}>ตัวเลขสถิติบนเว็บ <span className="hint">(เว้นว่าง = นับอัตโนมัติจากระบบ)</span>

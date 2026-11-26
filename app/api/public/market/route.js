@@ -1,7 +1,6 @@
 import { db } from '@/lib/db';
 import { clean } from '@/lib/schema';
 import { ok, fail, body, refresh, str, rateLimit } from '@/lib/api';
-import { notifyAdmins } from '@/lib/line';
 
 import { makeCode } from '@/lib/codes';
 
@@ -19,7 +18,6 @@ export async function POST(req) {
   while (used.has(mc)) mc = makeCode('market');
   item.manageCode = mc;
   await db.put('market', item);
-  await notifyAdmins(`🛍️ มีประกาศฝากขายใหม่รออนุมัติ\n${item.title} — ${item.price || '-'}\nผู้ขาย: ${item.sellerName} (${item.sellerClass})`);
   refresh();
   return ok({ ok: true, id: item.id, manageCode: item.manageCode });
 }

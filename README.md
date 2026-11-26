@@ -10,7 +10,7 @@ Next.js 16 · ธีมฟ้า-ขาว · ฟอนต์ TH Niramit AS ท�
 | `/members`, `/members/[id]` | การ์ดสมาชิก (รูป ชื่อ ตำแหน่ง คำคม) + หน้าประวัติและผลงานของแต่ละคน |
 | `/works` | 1. จิตอาสาวิชาการ & ศูนย์รวมผลงาน (กรองตามประเภท/สมาชิก/ค้นหา) |
 | `/calendar` | 2. สื่อสารฉับไว: ปฏิทินวิชาการ + ถาม-ตอบในแต่ละกิจกรรม |
-| `/report` | 3. QR Code แจ้งปัญหา: สแกน QR Code LINE ของสภา (แอดมินอัปโหลดภาพ) + สถิติที่แอดมินแก้ได้ |
+| `/report` | 3. QR Code แจ้งปัญหา: สแกน QR Code Traffy Fondue (แอดมินอัปโหลดภาพ + ใส่ลิงก์) + สถิติที่แอดมินแก้ได้ |
 | `/market` | 4. ตลาดนัดออนไลน์: ฝากขาย → สภาอนุมัติ → แสดง 30 วัน, ผู้ขายจัดการเองด้วยรหัส |
 | `/admin` | ผู้ดูแลระบบ (มีได้หลายบัญชี — ตั้งผ่าน env `ADMIN_ACCOUNTS` ใน Vercel, รายชื่อแอดมินไม่แสดงบนเว็บ) จัดการได้ทุกส่วน |
 | `/scmember` | สมาชิกสภาเข้าสู่ระบบ: แก้โปรไฟล์, อัปโหลดผลงาน, ตอบคำถาม, เปลี่ยนรหัสผ่าน |
@@ -25,16 +25,6 @@ Next.js 16 · ธีมฟ้า-ขาว · ฟอนต์ TH Niramit AS ท�
 
 > ถ้ายังไม่เชื่อม Redis เว็บจะเปิดได้ แต่ข้อมูลที่แก้ไขจะไม่ถูกบันทึกถาวร
 
-## ตั้งค่า LINE (ระบบแจ้งเตือน)
-1. สร้าง LINE Official Account + เปิด Messaging API ที่ https://developers.line.biz
-2. นำ *Channel access token* และ *Channel secret* ใส่ env `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`
-3. ใส่ Basic ID (เช่น `@123abcde`) ใน `NEXT_PUBLIC_LINE_OA_ID` และตั้ง `LINE_ADMIN_KEY`, `NEXT_PUBLIC_SITE_URL`
-4. Webhook URL: `https://<โดเมน>/api/line/webhook` → เปิด *Use webhook*, ปิด *Auto-reply*
-5. Redeploy
-
-การทำงาน:
-- ผู้แจ้งกด “รับแจ้งเตือนทาง LINE” (หรือพิมพ์รหัส เช่น `CR7K2QXA` ในแชต) → ได้รับข้อความทุกครั้งที่แอดมินเปลี่ยนสถานะ
-- แอดมิน/กลุ่ม LINE สภา พิมพ์ `ADMIN <LINE_ADMIN_KEY>` → รับแจ้งเตือนเมื่อมีเรื่องใหม่ / คำถาม / ประกาศฝากขาย (`ADMIN OFF` เพื่อยกเลิก)
 
 ## พัฒนาบนเครื่อง
 ```bash
@@ -50,7 +40,6 @@ npm run dev   # ข้อมูลเก็บที่ .data/db.json อัต�
 - กัน CSRF (`proxy.js` ตรวจ Origin / Sec-Fetch-Site), กัน Clickjacking (X-Frame-Options + CSP frame-ancestors)
 - อัปโหลดรูปตรวจลายเซ็นไฟล์จริง (PNG/JPG/WebP/GIF เท่านั้น), ข้อมูลจากบุคคลทั่วไปรับเฉพาะรูปที่อัปผ่านระบบ
 - ข้อมูลส่วนตัวผู้แจ้งปัญหา / รหัสจัดการประกาศ / รหัสผ่าน ไม่ถูกส่งไปหน้าสาธารณะ
-- LINE webhook ตรวจลายเซ็น `x-line-signature`
 
 ## ความเร็ว
 - หน้าสาธารณะเป็น static + ISR (แคชที่ CDN, รีเฟรชทันทีเมื่อแก้ไขผ่าน /admin)

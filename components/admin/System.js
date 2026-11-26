@@ -38,9 +38,6 @@ export default function System() {
               : s.blobOk ? `ทดสอบอัปโหลดสำเร็จ (ที่เก็บแบบ ${s.blobAccess === 'private' ? 'Private' : 'Public'}) — รูปภาพโหลดผ่าน CDN`
               : `ตั้งค่าแล้วแต่ทดสอบอัปโหลดไม่สำเร็จ: ${s.blobErr} (ระบบจะเก็บรูปในฐานข้อมูลแทนชั่วคราว)`}
           </Row>
-          <Row ok={s.line} title="LINE Messaging API">
-            {s.line ? `เชื่อมต่อแล้ว${s.lineOA ? ` · OA: ${s.lineOA}` : ''}${s.lineAdminKey ? '' : ' · ยังไม่ได้ตั้ง LINE_ADMIN_KEY'}` : 'ยังไม่ได้ตั้งค่า (ระบบแจ้งปัญหายังใช้ได้ผ่านเว็บ)'}
-          </Row>
           <Row ok={s.authSecret} title="AUTH_SECRET">
             {s.authSecret ? 'ตั้งค่าแล้ว' : 'แนะนำให้ตั้งค่า AUTH_SECRET ใน Vercel เพื่อความปลอดภัยของการเข้าสู่ระบบ'}
           </Row>
